@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NearyFrame;
 using NearyFrame.Base;
-using Sirenix.Serialization;
 using UniRx;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -29,7 +28,8 @@ namespace BrickSaboteur
     public class EntityManager : ManagerBase<EntityManager, IEntityTag>
     {
         public readonly List<BoardEntity> boards = new List<BoardEntity>();
-        [OdinSerialize] public readonly HashSet<BallEntity> balls = new HashSet<BallEntity>();
+        // [OdinSerialize]
+         public readonly HashSet<BallEntity> balls = new HashSet<BallEntity>();
         protected override void OnDestroy()
         {
             Mgr.Instance.UnRegisterModule(this);

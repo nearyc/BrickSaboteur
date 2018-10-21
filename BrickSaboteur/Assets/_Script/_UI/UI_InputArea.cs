@@ -12,7 +12,6 @@
 #endregion
 using System.Collections;
 using NearyFrame.Base;
-using Sirenix.Serialization;
 using UniRx;
 using UniRx.Triggers;
 using Unity.Linq;
@@ -21,10 +20,13 @@ namespace BrickSaboteur
 {
     public class UI_InputArea : ElementBaseSingle<UI_InputArea, IUITag>
     {
-        [OdinSerialize] private float deltaVertical;
+        [SerializeField]
+        private float deltaVertical;
 
-        [OdinSerialize] Camera _camera;
-        [OdinSerialize][Range(1, 3)] float _modifier;
+        [SerializeField] 
+        Camera _camera;
+        [SerializeField][Range(1, 3)]
+         float _modifier;
         // [OdinSerialize] Vector2 _center;
         protected override IEnumerator AfterStart()
         {

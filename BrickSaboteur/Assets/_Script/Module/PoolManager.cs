@@ -15,7 +15,6 @@ using System.Collections.Generic;
 using Nearyc.Utility;
 using NearyFrame;
 using NearyFrame.Base;
-using Sirenix.Serialization;
 using UniRx;
 using UniRx.Toolkit;
 using UnityEngine;
@@ -47,7 +46,8 @@ namespace BrickSaboteur
             // _pools = new Dictionary<string, AsyncPool>();
         }
         #endregion
-        [OdinSerialize] Dictionary<string, AsyncPool> _pools;
+        [Sirenix.OdinInspector.ShowInInspector] 
+        Dictionary<string, AsyncPool> _pools;
         /// <summary>
         /// 创建或得到异步池
         /// </summary>

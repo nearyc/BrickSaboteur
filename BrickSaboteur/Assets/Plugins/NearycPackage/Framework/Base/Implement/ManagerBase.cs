@@ -16,7 +16,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 namespace NearyFrame.Base
 {
-    public abstract class ManagerBase : SerializedMonoBehaviour { }
+    public abstract class ManagerBase : MonoBehaviour { }
     /// <summary>
     /// UI模块抽象,单例
     /// </summary>
@@ -56,7 +56,8 @@ namespace NearyFrame.Base
             }
 
             #endregion
-            [Sirenix.Serialization.OdinSerialize] protected Dictionary<Type, ElementBase<Tag>> _moduleElementDict;
+            [Sirenix.OdinInspector.ShowInInspector]
+             protected Dictionary<Type, ElementBase<Tag>> _moduleElementDict;
             /// <summary>
             /// 创建时候，注册自己
             /// </summary>

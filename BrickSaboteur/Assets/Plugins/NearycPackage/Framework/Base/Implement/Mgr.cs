@@ -19,7 +19,7 @@ namespace NearyFrame.Base
     /// <summary>
     /// 全局游戏管理,游戏入口
     /// </summary>
-    public class Mgr : Sirenix.OdinInspector.SerializedMonoBehaviour, ISingleton
+    public class Mgr : MonoBehaviour, ISingleton
     {
         #region Singleton
         private Mgr() { }
@@ -42,7 +42,8 @@ namespace NearyFrame.Base
             }
         }
         #endregion
-        [Sirenix.Serialization.OdinSerialize] private Dictionary<Type, IModule> _moduleDict;
+        // [Sirenix.Serialization.OdinSerialize] 
+        private Dictionary<Type, IModule> _moduleDict;
         /// <summary>
         /// 注册模块
         /// </summary>

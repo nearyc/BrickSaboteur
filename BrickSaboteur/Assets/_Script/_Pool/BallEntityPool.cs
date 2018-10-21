@@ -18,7 +18,8 @@ namespace BrickSaboteur
 {
     public abstract class AsyncPoolHolder<T> : ElementBase<IPoolTag> where T : ElementBase
     {
-        [Sirenix.Serialization.OdinSerialize] protected Nearyc.Utility.AsyncPool<T> pool;
+        // [Sirenix.Serialization.OdinSerialize] 
+        protected Nearyc.Utility.AsyncPool<T> pool;
         [SerializeField] protected string _ballPath => ballPath;
         protected abstract string ballPath { get; }
         protected override IEnumerator OnStart()

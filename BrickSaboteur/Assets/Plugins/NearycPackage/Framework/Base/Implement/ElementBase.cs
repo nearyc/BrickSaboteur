@@ -14,7 +14,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 namespace NearyFrame.Base
 {
-    public abstract class ElementBase : SerializedMonoBehaviour
+    public abstract class ElementBase : MonoBehaviour
     {
 
     }

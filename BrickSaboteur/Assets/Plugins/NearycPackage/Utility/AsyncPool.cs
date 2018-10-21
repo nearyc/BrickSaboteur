@@ -67,7 +67,8 @@ namespace Nearyc.Utility
         public Transform parent;
         public bool setInActiveWhenReturn { get; set; } = true;
         bool isDisposed = false;
-        [Sirenix.Serialization.OdinSerialize] Queue<T> q;
+        [Sirenix.OdinInspector.ShowInInspector] 
+        Queue<T> q;
         public int MaxCount { get; set; }
         protected GameObject prefab;
         protected AssetReference refer;

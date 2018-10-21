@@ -10,7 +10,6 @@
 //===================================================
 
 #endregion
-using Cinemachine;
 using NearyFrame;
 using NearyFrame.Base;
 using Unity.Linq;

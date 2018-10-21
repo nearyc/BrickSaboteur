@@ -15,7 +15,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NearyFrame;
 using NearyFrame.Base;
-using Sirenix.Serialization;
 using UniRx;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -33,7 +32,8 @@ namespace BrickSaboteur
         [SerializeField] public Tilemap levelTile;
         [SerializeField] TileBase _wall;
         [SerializeField] public List<TileBase> bricktileList;
-        [OdinSerialize] public int leftBrickCount => bricktileList.Count;
+        [Sirenix.OdinInspector.ShowInInspector] 
+        public int leftBrickCount => bricktileList.Count;
         protected override void OnDestroy()
         {
             Mgr.Instance.UnRegisterModule(this);

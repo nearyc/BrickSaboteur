@@ -16,7 +16,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NearyFrame;
 using NearyFrame.Base;
-using Sirenix.Serialization;
 using UniRx;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -38,8 +37,10 @@ namespace BrickSaboteur
     /// <typeparam name="ILoaderTag">Tag</typeparam>
     public class LoaderManager : ManagerBase<LoaderManager, ILoaderTag>
     {
-        [OdinSerialize] private string _prefix => AddressablePathEx.PREFIX;
-        [OdinSerialize] private string _prefabSuffix => AddressablePathEx.PREFAB_SUFFIX;
+        [Sirenix.OdinInspector.ShowInInspector] 
+        private string _prefix => AddressablePathEx.PREFIX;
+        [Sirenix.OdinInspector.ShowInInspector] 
+        private string _prefabSuffix => AddressablePathEx.PREFAB_SUFFIX;
         private List<UnityEngine.ResourceManagement.IResourceLocation> some;
         protected override void OnDestroy()
         {
