@@ -1,0 +1,50 @@
+ManifestFileVersion: 0
+CRC: 2353940442
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 3bba0dd172354ad7fde58e61ef9bebbe
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5147862b2e1399c8e8b5ccffb6c45dfb
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 50
+  Script: {instanceID: 0}
+- Class: 58
+  Script: {instanceID: 0}
+- Class: 61
+  Script: {instanceID: 0}
+- Class: 62
+  Script: {instanceID: 0}
+- Class: 68
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: c9b6b40335ac9034dad41ce9c638b148, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: b23ff3a41dc429a40b9117e2cc3a8d7e, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c55509bb26e0f124a9e7e818af8e9a85, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 212
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/_Prefabs/Entity/Ball.prefab
+- Assets/_Prefabs/Entity/Bonus_1.prefab
+- Assets/_Prefabs/Entity/Bonus_3.prefab
+- Assets/_Prefabs/Entity/Board.prefab
+- Assets/_Prefabs/Entity/Bonus_2.prefab
+Dependencies: []

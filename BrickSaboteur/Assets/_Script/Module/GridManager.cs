@@ -45,9 +45,10 @@ namespace BrickSaboteur
             Mgr.Instance.RegisterModule(this);
             yield return null;
             Debug.Log("Create GridManager");
-            // var scene = GameObject.Find("Scene");
-            // this.transform.parent = scene.transform;
-
+			// var scene = GameObject.Find("Scene");
+			// this.transform.parent = scene.transform;
+#if USE_ADDRASABLE
+#endif
             // Addressables.LoadAssets<GameObject>("Grids", x => Debug.Log(x.Result.name));
             // grids = new Queue<GridEntity>();
             // var initDiff = 3;
@@ -60,7 +61,8 @@ namespace BrickSaboteur
             BoundsInt bounds = levelTile.cellBounds;
             TileBase[] allTiles = levelTile.GetTilesBlock(bounds);
             bricktileList = allTiles.Where(x => x != null && x.name != _wall.name).ToList();
-        }
+			
+		}
         public void ReleaseTileWorldPos(Vector2 point)
         {
             var gridPos = levelTile.WorldToCell(point);
@@ -71,7 +73,7 @@ namespace BrickSaboteur
                 levelTile.SetTile(gridPos, null);
                 int bonusNum = Random.Range(1, 50);
                 if (bonusNum < 4)
-                    BrickMgrM.LoaderManager.InstantiateByPath<SkillBonusEntity>("Entity/Bonus_" + bonusNum, this.transform, x =>
+                    BrickMgrM.LoaderManager.InstantiateByPath<GameObject>("Entity/Bonus_" + bonusNum, this.transform, x =>
                     {
                         x.Result.transform.position = point;
                     })

@@ -52,23 +52,37 @@ MonoBehaviour:
       - m_id: 86d1a630f09902f49828148502c6c08a
         m_value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
       - m_id: 0fe1add00ee827340b56cc38f75bfea1
-        m_value: Assets/StreamingAssets/[BuildTarget]
+        m_value: Assets/StreamingAssets/com.unity.addressables/[BuildTarget]
       - m_id: 677de3e790cc4154b9a205d3f25d68f6
-        m_value: file://{UnityEngine.Application.streamingAssetsPath}/[BuildTarget]
+        m_value: file://{UnityEngine.Application.streamingAssetsPath}/com.unity.addressables/[BuildTarget]
       - m_id: 6ae687aa9512c984f8485d0ceeb69a13
         m_value: Assets/StreamingAssets/Remote
       - m_id: c5b6a5b4292ec2742bb2b1e5822e6a48
         m_value: file://{UnityEngine.Application.streamingAssetsPath}/Remote
     - m_inheritedParent: 
-      m_id: 7e3d18fca3898bd4880f94c7a187ae58
-      m_profileName: Test
+      m_id: fb1a90e8fa2b93c4f85786c83d0193a1
+      m_profileName: Android
       m_values:
       - m_id: 86d1a630f09902f49828148502c6c08a
         m_value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
       - m_id: 0fe1add00ee827340b56cc38f75bfea1
-        m_value: Assets/StreamingAssets/[BuildTarget]
+        m_value: Assets/StreamingAssets/com.unity.addressables/[BuildTarget]
       - m_id: 677de3e790cc4154b9a205d3f25d68f6
-        m_value: Assets/StreamingAssets/[BuildTarget]
+        m_value: '{UnityEngine.Application.dataPath}/assets/com.unity.addressables/[BuildTarget]'
+      - m_id: 6ae687aa9512c984f8485d0ceeb69a13
+        m_value: ServerData/[BuildTarget]
+      - m_id: c5b6a5b4292ec2742bb2b1e5822e6a48
+        m_value: http://localhost/[BuildTarget]
+    - m_inheritedParent: 
+      m_id: 27514ee458a49614eab4a10c50c76e12
+      m_profileName: IOS
+      m_values:
+      - m_id: 86d1a630f09902f49828148502c6c08a
+        m_value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
+      - m_id: 0fe1add00ee827340b56cc38f75bfea1
+        m_value: Assets/StreamingAssets/com.unity.addressables/[BuildTarget]
+      - m_id: 677de3e790cc4154b9a205d3f25d68f6
+        m_value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
       - m_id: 6ae687aa9512c984f8485d0ceeb69a13
         m_value: ServerData/[BuildTarget]
       - m_id: c5b6a5b4292ec2742bb2b1e5822e6a48
@@ -115,12 +129,12 @@ MonoBehaviour:
       m_className: UnityEditor.AddressableAssets.ContentUpdateGroupSchema
   m_initializationObjects: []
   m_activePlayerDataBuilderIndex: 2
-  m_activePlayModeDataBuilderIndex: 0
+  m_activePlayModeDataBuilderIndex: 2
   m_dataBuilders:
   - {fileID: 11400000, guid: 8263a47df9c7f4d4f8d823c341fc4c62, type: 2}
   - {fileID: 11400000, guid: cd569cf0632bb2940ab5f3743f3c90db, type: 2}
   - {fileID: 11400000, guid: e8544b9d5645e3a45b58dfc2598460d2, type: 2}
-  m_activeProfileId: a390f79824ca7a0439d1f4a2910ee944
+  m_activeProfileId: fb1a90e8fa2b93c4f85786c83d0193a1
   m_hostingServicesManager:
     m_hostingServiceInfos: []
     m_settings: {fileID: 11400000}

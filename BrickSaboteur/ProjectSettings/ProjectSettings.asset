@@ -640,6 +640,7 @@ PlayerSettings:
   webGLLinkerTarget: 1
   scriptingDefineSymbols:
     1: ODIN_INSPECTOR;CROSS_PLATFORM_INPUT;MOBILE_INPUT
+    4: ODIN_INSPECTOR
     7: ODIN_INSPECTOR;MOBILE_INPUT;CROSS_PLATFORM_INPUT
   platformArchitecture: {}
   scriptingBackend:

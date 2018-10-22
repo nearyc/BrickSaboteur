@@ -48,8 +48,21 @@ namespace BrickSaboteur
             Mgr.Instance.UnRegisterModule(this);
             Debug.Log("UnRegister LoaderManager");
         }
+		// private void Update()
+		// {
+		// 	if (Input.GetMouseButtonDown(0))
+		// 	{
+		// 		Debug.Log(123);
 
-        protected override System.Collections.IEnumerator OnInitializeRegisterSelf()
+		// 		BrickMgrM.LoaderManager.InstantiateByPath<GameObject>("Entity/Bonus_1", this.transform, x =>
+		// 		{
+		// 			var temp = BrickMgrM.CameraManager.mainCam.ScreenToWorldPoint(Input.mousePosition);
+		// 			temp.z = 0;
+		// 			x.Result.transform.position = temp;
+		// 		}).Subscribe();
+		// 	}	
+		// }
+		protected override System.Collections.IEnumerator OnInitializeRegisterSelf()
         {
 
             isLoaded = false;
@@ -59,6 +72,9 @@ namespace BrickSaboteur
             //  yield return Addressables.InstantiateAll<GameObject>("Managers", null, this.transform);
             yield return null;
             isLoaded = true;
+            //Addressables.LoadAssets<Texture2D>("default",x=>{
+            //    Debug.Log(x.Result.name);
+            //});
         }
         public void ReloadGame()
         {
@@ -79,6 +95,7 @@ namespace BrickSaboteur
             Action<IAsyncOperation<IList<T>>> onCompleted = null)
         where T : UnityEngine.Object
         {
+
             return ObservableAddressables.InstantiateAll<T>(key, parentTran, onSingleCompleted, onCompleted);
         }
 

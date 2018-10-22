@@ -45,16 +45,7 @@ namespace BrickSaboteur
             multiply = new NormalSKill(this, ESkillTag.Attack, 0.5f);
             multiply.onSkillStart += MultiplySkillExecute;
         }
-		private void Update()
-		{
-			if (Input.GetMouseButtonDown(0))
-			{
-				BrickMgrM.LoaderManager.InstantiateByPath<BallEntity>("Entity/Ball", this.transform, x =>
-				{
-					x.Result.transform.position = BrickMgrM.CameraManager.mainCam.ScreenToWorldPoint(Input.mousePosition);
-				}).Subscribe();
-			}
-		}
+
 		public void TryExecuteMultiply()
         {
             multiply.TryExecuteSKill(multiplyCount.Current > 1);

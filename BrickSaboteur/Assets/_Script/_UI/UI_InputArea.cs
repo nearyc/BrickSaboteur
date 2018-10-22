@@ -65,7 +65,7 @@ namespace BrickSaboteur
                 });
         }
 
-        protected override void OnDestroy()
+		protected override void OnDestroy()
         {
             this.UnRegisterSelf(this);
         }
