@@ -47,6 +47,7 @@ namespace BrickSaboteur
                 .RepeatUntilDestroy(this)
                 .Subscribe(data =>
                 {
+					//Debug.Log(1);
                     worldX = _camera.ScreenToWorldPoint(data.position).x * _modifier;
                     deltaVertical = last == null?0: (worldX - last.Value);
                     temp.x = deltaVertical;
@@ -58,7 +59,8 @@ namespace BrickSaboteur
                 .RepeatUntilDestroy(this)
                 .Subscribe(data =>
                 {
-                    last = null;
+					//Debug.Log(1);
+					last = null;
                     deltaVertical = 0;
                 });
         }
