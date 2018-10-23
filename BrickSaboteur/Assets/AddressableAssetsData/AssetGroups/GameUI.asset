@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: GameUI
+  m_EditorClassIdentifier: 
+  m_name: GameUI
+  m_data:
+    m_serializedData: []
+  m_guid: 9b2751a0e820b064c844a508823d12e4
+  m_serializeEntries:
+  - m_guid: 2e212d2cd30bd404da46b57ffcd0e196
+    m_address: Assets/_Prefabs/UI/GmaeUI
+    m_readOnly: 0
+    m_serializedLabels:
+    - UIGameRoot
+  - m_guid: b390a5cb422ec4a46befa56f1dc9f14b
+    m_address: Assets/_Prefabs/UI/HealthIcon.prefab
+    m_readOnly: 0
+    m_serializedLabels: []
+  m_readOnly: 0
+  m_settings: {fileID: 11400000, guid: 504c9cf66fc75ea44b7dc84ead805c0b, type: 2}
+  m_schemaSet:
+    m_schemas:
+    - {fileID: 11400000, guid: 575b8ab7e4a31834c992421e569e4661, type: 2}
+    - {fileID: 11400000, guid: f89b9730878100741999c2b4e7f72283, type: 2}

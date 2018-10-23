@@ -18,6 +18,11 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace BrickSaboteur
 {
+    /// <summary>
+    /// Multiply技能对应的Prensenter
+    /// </summary>
+    /// <typeparam name="UI_MultiplySkill"></typeparam>
+    /// <typeparam name="IUITag"></typeparam>
     public class UI_MultiplySkill : ElementBaseSingle<UI_MultiplySkill, IUITag>
     {
         [SerializeField] Text countText;
@@ -34,18 +39,13 @@ namespace BrickSaboteur
 
             countText = countText.GetComponentFromDescendants(this, nameof(countText));
             skillButton = skillButton.GetComponentFromChildren(this, nameof(skillButton));
-            yield return BrickMgrM.WaitModule<IInputTag>();
+            yield return BrickMgrM.WaitModule<IPropertyTag>();
             yield return new WaitForSeconds(0.1f);
-            skillHolder = BrickMgrM.InputModule.GetElement<SkillHolder>();
-
-            skillButton.OnClickAsObservable()
-                .Subscribe(__ => skillHolder.TryExecuteMultiply()).AddTo(this);
+            skillHolder = BrickMgrM.PeropertyModule.GetElement<SkillHolder>();
+            //按下按键尝试释放
+            skillButton.OnClickAsObservable().Subscribe(__ => skillHolder.TryExecuteMultiply()).AddTo(this);
+            //更新数字
+            skillHolder.multiplyCount.current.SubscribeToText(countText).AddTo(this);
         }
-        private void Update()
-        {
-            if (!_isInited) return;
-            countText.text = skillHolder.multiplyCount.Current.ToString();
-        }
-
     }
 }

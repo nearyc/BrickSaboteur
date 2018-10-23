@@ -29,64 +29,88 @@ namespace BrickSaboteur
     {
 
     }
+    public enum EDifficulty
+    {
+        Eazy = 1,
+        Hard = 2,
+    }
+
     public interface ILoaderTag : IModuleTag<ILoaderTag> { }
     /// <summary>
-    /// 加载游戏管理
+    /// 游戏管理
     /// </summary>
     /// <typeparam name="LoaderManager">Self</typeparam>
     /// <typeparam name="ILoaderTag">Tag</typeparam>
     public class LoaderManager : ManagerBase<LoaderManager, ILoaderTag>
     {
-        [Sirenix.OdinInspector.ShowInInspector] 
-        private string _prefix => AddressablePathEx.PREFIX;
-        [Sirenix.OdinInspector.ShowInInspector] 
-        private string _prefabSuffix => AddressablePathEx.PREFAB_SUFFIX;
-        private List<UnityEngine.ResourceManagement.IResourceLocation> some;
+        public EDifficulty lastDifficulty; //上次游戏的难度
+        public int lastLevel; //上次游戏的关卡数
+        //TODO Game State
+        public bool isInGameState = false; //游戏状态
+        [Sirenix.OdinInspector.ShowInInspector] private string _prefabPrefix => AddressablePathEx.PREFAB_PREFIX;
+        [Sirenix.OdinInspector.ShowInInspector] private string _prefabSuffix => AddressablePathEx.PREFAB_SUFFIX;
+        [SerializeField] private int sceneIndex = 0;
+        [SerializeField] private int levelIndex = 0;
         protected override void OnDestroy()
         {
-
             Mgr.Instance.UnRegisterModule(this);
             Debug.Log("UnRegister LoaderManager");
         }
-		// private void Update()
-		// {
-		// 	if (Input.GetMouseButtonDown(0))
-		// 	{
-		// 		Debug.Log(123);
-
-		// 		BrickMgrM.LoaderManager.InstantiateByPath<GameObject>("Entity/Bonus_1", this.transform, x =>
-		// 		{
-		// 			var temp = BrickMgrM.CameraManager.mainCam.ScreenToWorldPoint(Input.mousePosition);
-		// 			temp.z = 0;
-		// 			x.Result.transform.position = temp;
-		// 		}).Subscribe();
-		// 	}	
-		// }
-		protected override System.Collections.IEnumerator OnInitializeRegisterSelf()
+        protected override System.Collections.IEnumerator OnInitializeRegisterSelf()
         {
-
             isLoaded = false;
             Mgr.Instance.RegisterModule(this);
             Debug.Log("Create LoaderManager");
-            gameObject.AddComponent<InputManager>();
-            //  yield return Addressables.InstantiateAll<GameObject>("Managers", null, this.transform);
-            yield return null;
+            gameObject.AddComponent<PropertyManager>();
+            gameObject.AddComponent<SkillHolder>();
+
+            lastDifficulty = (EDifficulty) PlayerPrefs.GetInt("EDifficulty", 1);
+            lastLevel = PlayerPrefs.GetInt("Level", 1);
+
+            GameStart(1, EDifficulty.Eazy);
+            //游戏结束，设置状态为false
+            MessageBroker.Default.Receive<Tag_GameEnd>().Subscribe(__ => isInGameState = false).AddTo(this);
+            //回到主菜单，设置状态为false
+            MessageBroker.Default.Receive<Tag_BackToMenu>().Subscribe(__ => isInGameState = false).AddTo(this);
+
+            yield return new WaitForSeconds(1);
             isLoaded = true;
-            //Addressables.LoadAssets<Texture2D>("default",x=>{
-            //    Debug.Log(x.Result.name);
-            //});
         }
-        public void ReloadGame()
+        //游戏开始,1和2都对应游戏scene
+        public void GameStart(int level, EDifficulty difficulty)
         {
-            SceneManager.LoadScene(0);
-            Destroy(this.gameObject);
+            if (sceneIndex != 1)
+                LoadScene(1).Completed += __ =>
+                {
+                    MessageBroker.Default.Publish(new Tag_GameStart(level, difficulty));
+                    sceneIndex = 1;
+                    levelIndex++;
+                };
+            else
+            {
+                LoadScene(2).Completed += __ =>
+                {
+                    MessageBroker.Default.Publish(new Tag_GameStart(level, difficulty));
+                    sceneIndex = 2;
+                    levelIndex++;
+                };
+            }
         }
-        bool isLoadingScene;
-        IEnumerator LoadGame()
+        //游戏结束
+        public void GameEnd(bool isWin)
         {
-            isLoadingScene = true;
-            yield return SceneManager.LoadSceneAsync(0);
-            Destroy(this.gameObject);
+            //TODO
+            MessageBroker.Default.Publish(new Tag_GameEnd(isWin));
+            //test
+            GameStart(levelIndex, EDifficulty.Eazy);
+        }
+        //回到主菜单，3对应主菜单scene
+        public void BackToMainMenu()
+        {
+            LoadScene(3).Completed += x =>
+            {
+                MessageBroker.Default.Publish(new Tag_BackToMenu());
+            };
         }
         #region Addressable
         // ---------------------------------
@@ -104,10 +128,10 @@ namespace BrickSaboteur
         {
             return ObservableAddressables.Instantiate<T>(key, parentTran, onCompleted, isWorldSpace);;
         }
-        public System.IObservable<T> InstantiateByPath<T>(string path, Transform parentTran, Action<IAsyncOperation<T>> onCompleted = null, bool isWorldSpace = false)
+        public System.IObservable<T> InstantiatePrefabByPath<T>(string path, Transform parentTran, Action<IAsyncOperation<T>> onCompleted = null, bool isWorldSpace = false)
         where T : UnityEngine.Object
         {
-            var fullPath = $"{_prefix}{path}{_prefabSuffix}";
+            var fullPath = $"{_prefabPrefix}{path}{_prefabSuffix}";
 
             return ObservableAddressables.Instantiate<T>(fullPath, parentTran, onCompleted, isWorldSpace);
         }
@@ -128,7 +152,7 @@ namespace BrickSaboteur
         public System.IObservable<T> LoadAssetByPath<T>(string path, Action<IAsyncOperation<T>> onCompleted = null)
         where T : UnityEngine.Object
         {
-            var fullPath = $"{_prefix}{path}{_prefabSuffix}";
+            var fullPath = $"{_prefabPrefix}{path}{_prefabSuffix}";
 
             return ObservableAddressables.LoadAsset<T>(fullPath, onCompleted);
         }

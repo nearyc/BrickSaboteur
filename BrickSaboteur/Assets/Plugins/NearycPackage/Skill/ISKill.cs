@@ -57,6 +57,7 @@ namespace Nearyc.Skill
     [System.Flags]
     public enum ESkillTag
     {
+        Node = 1 << 0,
         Spell = 1 << 1,
         Attack = 1 << 2,
     }

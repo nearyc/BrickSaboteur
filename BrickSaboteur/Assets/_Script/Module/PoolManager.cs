@@ -43,11 +43,9 @@ namespace BrickSaboteur
             yield return null;
 
             _moduleElementDict = null; //   用不到
-            // _pools = new Dictionary<string, AsyncPool>();
         }
         #endregion
-        [Sirenix.OdinInspector.ShowInInspector] 
-        Dictionary<string, AsyncPool> _pools;
+        [Sirenix.OdinInspector.ShowInInspector] Dictionary<string, AsyncPool> _pools;
         /// <summary>
         /// 创建或得到异步池
         /// </summary>
@@ -87,6 +85,9 @@ namespace BrickSaboteur
                 return pool;
             }
         }
+
+        [Sirenix.OdinInspector.ShowInInspector] private string _prefabPrefix => AddressablePathEx.PREFAB_PREFIX;
+        [Sirenix.OdinInspector.ShowInInspector] private string _prefabSuffix => AddressablePathEx.PREFAB_SUFFIX;
         public AsyncPool<U> GetOrCreate<U>(string referPath, string key = null, Func<IObservable<U>> createFunc = null, int maxCount = 100) where U : Component
         {
             if (_pools == null)
@@ -98,7 +99,7 @@ namespace BrickSaboteur
             }
             else
             {
-                var pool = new AsyncPool<U>($"Assets/_Prefabs/{referPath}.prefab", createFunc, maxCount);
+                var pool = new AsyncPool<U>($"{_prefabPrefix}{referPath}{_prefabSuffix}", createFunc, maxCount);
                 Debug.Log(pool);
                 pool.parent = this.transform;
                 _pools.Add(key, pool);
@@ -151,67 +152,3 @@ namespace BrickSaboteur
     }
 
 }
-
-// public IObservable<U> RentOrCreateAsync<U>(
-//     Refer refer = null, Func<IObservable<U>> createFunc = null, int maxCount = 100)where U : Component
-// {
-//     var t = typeof(U);
-//     if (_pools.ContainsKey(t))
-//     {
-
-//         var pool = _pools[t] as AsyncPool<U>;
-//         if (pool != null)
-//         {
-//             return pool.RentAsync();
-//         }
-//         // 有，但是却不是AsyncPool
-//         _pools.Remove(t);
-//     }
-//     //  Create New By Refer
-//     var pool2 = new AsyncPool<U>(refer, createFunc, maxCount);
-//     _pools.Add(t, pool2);
-//     return pool2.RentAsync();
-// }
-// public IObservable<U> RentOrCreateAsync<U>(
-//     GameObject gameObject = null, Func<IObservable<U>> createFunc = null, int maxCount = 100)where U : Component
-// {
-//     var t = typeof(U);
-//     if (_pools.ContainsKey(t))
-//     {
-
-//         var pool = _pools[t] as AsyncPool<U>;
-//         if (pool != null)
-//         {
-//             return pool.RentAsync();
-//         }
-//         // 有，但是却不是AsyncPool
-//         _pools.Remove(t);
-//     }
-//     //  Create New By Go
-//     var pool2 = new AsyncPool<U>(gameObject, createFunc, maxCount);
-//     _pools.Add(t, pool2);
-//     return pool2.RentAsync();
-// }
-// public override bool RegisterSingleton(ElementBase<IPoolTag> ele)
-// {
-//     if (_poolElementDict.ContainsKey(ele.GetType()))
-//         return false;
-//     if (ele is IDisposable == false)
-//         return false;
-
-//     _poolElementDict.Add(ele.GetType(), ele);
-//     return true;
-// }
-// public override void UnRegisterSingleton(ElementBase<IPoolTag> ele)
-// {
-//     _poolElementDict.Remove(ele.GetType());
-// }
-// public U GetElement<U, T>()where U : NearyFrame.Base.AsyncObjectPool<T> where T : Component
-// {
-//     object temp;
-//     if (_poolElementDict.TryGetValue(typeof(U), out temp))
-//     {
-//         return temp as U;
-//     }
-//     return default(U);
-// }

@@ -30,10 +30,11 @@ namespace BrickSaboteur
     public class GridManager : ManagerBase<GridManager, IGridTag>
     {
         [SerializeField] public Tilemap levelTile;
+        [SerializeField] public Transform bgTile;
         [SerializeField] TileBase _wall;
-        [SerializeField] public List<TileBase> bricktileList;
-        [Sirenix.OdinInspector.ShowInInspector] 
-        public int leftBrickCount => bricktileList.Count;
+        [SerializeField] public List<TileBase> brickTileList;
+        [Sirenix.OdinInspector.ShowInInspector]
+        public int leftBrickCount => brickTileList.Count;
         protected override void OnDestroy()
         {
             Mgr.Instance.UnRegisterModule(this);
@@ -43,44 +44,72 @@ namespace BrickSaboteur
         protected override System.Collections.IEnumerator OnInitializeRegisterSelf()
         {
             Mgr.Instance.RegisterModule(this);
-            yield return null;
             Debug.Log("Create GridManager");
-			// var scene = GameObject.Find("Scene");
-			// this.transform.parent = scene.transform;
-#if USE_ADDRASABLE
-#endif
-            // Addressables.LoadAssets<GameObject>("Grids", x => Debug.Log(x.Result.name));
-            // grids = new Queue<GridEntity>();
-            // var initDiff = 3;
-            // for (int i = 1; i <= initDiff; i++)
-            // {
-            //     currentDiff = i;
-            //     Generate(currentDiff);
-            // }
-            // var pool = MgrM.PoolModule.GetOrCreate<GridEntity>(CreateFunc(), nameof(GridEntity) + "Pool");
+            yield return BrickMgrM.WaitModule<ILoaderTag>();
+
+            //游戏开始，加载对应关卡的LevelTile
+            MessageBroker.Default.Receive<Tag_GameStart>().Subscribe(x => StartCoroutine(LoadLevel(x.level, x.difficulty))).AddTo(this);;
+            //游戏结束，卸载对应的LevelTile
+            MessageBroker.Default.Receive<Tag_BackToMenu>().Subscribe(__ => ReleaseLevel()).AddTo(this);;
+        }
+        private void ReleaseLevel()
+        {
+            if (levelTile != null)
+                BrickMgrM.LoaderManager.ReleaseObject(levelTile.gameObject);
+        }
+        private IEnumerator LoadLevel(int level, EDifficulty difficulty)
+        {
+            //bgTile
+            if (bgTile == null)
+            {
+                var bgStream = BrickMgrM.LoaderManager.InstantiatePrefabByPath<GameObject>(AssetPath.LevelBackGround, null, x =>
+                {
+                    bgTile = x.Result.transform;
+                });
+                yield return bgStream.ToYieldInstruction();
+            }
+            //levelTile
+            ReleaseLevel();
+            var path = "";
+            switch (difficulty)
+            {
+                case EDifficulty.Eazy:
+                    path = $"{AssetPath.EasyLevel}{level}";
+                    break;
+                case EDifficulty.Hard:
+                    path = $"{AssetPath.HardLevel}{level}";
+                    break;
+            }
+            var levelStram = BrickMgrM.LoaderManager.InstantiatePrefabByPath<GameObject>(path, bgTile, x =>
+            {
+                levelTile = x.Result.GetComponent<Tilemap>();
+            });
+            yield return levelStram.ToYieldInstruction().AddTo(this);
+
             BoundsInt bounds = levelTile.cellBounds;
             TileBase[] allTiles = levelTile.GetTilesBlock(bounds);
-            bricktileList = allTiles.Where(x => x != null && x.name != _wall.name).ToList();
-			
-		}
+            brickTileList = allTiles.Where(x => x != null && x.name != _wall.name).ToList();
+        }
+        private Transform _bonusParent;
         public void ReleaseTileWorldPos(Vector2 point)
         {
+            if (_bonusParent == null) _bonusParent = transform.Find("BonusParent");
             var gridPos = levelTile.WorldToCell(point);
             var tile = levelTile.GetTile(gridPos);
             if (tile != null && tile.name != _wall.name)
             {
-                bricktileList.Remove(tile);
+                brickTileList.Remove(tile);
                 levelTile.SetTile(gridPos, null);
                 int bonusNum = Random.Range(1, 50);
                 if (bonusNum < 4)
-                    BrickMgrM.LoaderManager.InstantiateByPath<GameObject>("Entity/Bonus_" + bonusNum, this.transform, x =>
+                    BrickMgrM.LoaderManager.InstantiatePrefabByPath<GameObject>(AssetPath.Bonus + bonusNum, _bonusParent, x =>
                     {
                         x.Result.transform.position = point;
                     })
                     .Subscribe();
                 if (leftBrickCount <= 0)
                 {
-                    NextLevel();
+                    BrickMgrM.LoaderManager.GameEnd(true);
                 }
             }
         }

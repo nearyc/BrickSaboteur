@@ -21,8 +21,7 @@ namespace UniRx
     }
 
     public interface IMessageBroker : IMessagePublisher, IMessageReceiver
-    {
-    }
+    { }
 
     public interface IAsyncMessagePublisher
     {
@@ -41,8 +40,7 @@ namespace UniRx
     }
 
     public interface IAsyncMessageBroker : IAsyncMessagePublisher, IAsyncMessageReceiver
-    {
-    }
+    { }
 
     /// <summary>
     /// In-Memory PubSub filtered by Type.
@@ -60,22 +58,22 @@ namespace UniRx
         public void Publish<T>(T message)
         {
             object notifier;
-            lock (notifiers)
-            {
-                if (isDisposed) return;
-
-                if (!notifiers.TryGetValue(typeof(T), out notifier))
+            lock(notifiers)
                 {
-                    return;
+                    if (isDisposed) return;
+
+                    if (!notifiers.TryGetValue(typeof(T), out notifier))
+                    {
+                        return;
+                    }
                 }
-            }
-            ((ISubject<T>)notifier).OnNext(message);
+                ((ISubject<T>) notifier).OnNext(message);
         }
 
         public IObservable<T> Receive<T>()
         {
             object notifier;
-            lock (notifiers)
+            lock(notifiers)
             {
                 if (isDisposed) throw new ObjectDisposedException("MessageBroker");
 
@@ -87,12 +85,12 @@ namespace UniRx
                 }
             }
 
-            return ((IObservable<T>)notifier).AsObservable();
+            return ((IObservable<T>) notifier).AsObservable();
         }
 
         public void Dispose()
         {
-            lock (notifiers)
+            lock(notifiers)
             {
                 if (!isDisposed)
                 {
@@ -119,14 +117,14 @@ namespace UniRx
         public IObservable<Unit> PublishAsync<T>(T message)
         {
             UniRx.InternalUtil.ImmutableList<Func<T, IObservable<Unit>>> notifier;
-            lock (notifiers)
+            lock(notifiers)
             {
                 if (isDisposed) throw new ObjectDisposedException("AsyncMessageBroker");
 
                 object _notifier;
                 if (notifiers.TryGetValue(typeof(T), out _notifier))
                 {
-                    notifier = (UniRx.InternalUtil.ImmutableList<Func<T, IObservable<Unit>>>)_notifier;
+                    notifier = (UniRx.InternalUtil.ImmutableList<Func<T, IObservable<Unit>>>) _notifier;
                 }
                 else
                 {
@@ -145,7 +143,7 @@ namespace UniRx
 
         public IDisposable Subscribe<T>(Func<T, IObservable<Unit>> asyncMessageReceiver)
         {
-            lock (notifiers)
+            lock(notifiers)
             {
                 if (isDisposed) throw new ObjectDisposedException("AsyncMessageBroker");
 
@@ -158,7 +156,7 @@ namespace UniRx
                 }
                 else
                 {
-                    var notifier = (ImmutableList<Func<T, IObservable<Unit>>>)_notifier;
+                    var notifier = (ImmutableList<Func<T, IObservable<Unit>>>) _notifier;
                     notifier = notifier.Add(asyncMessageReceiver);
                     notifiers[typeof(T)] = notifier;
                 }
@@ -169,7 +167,7 @@ namespace UniRx
 
         public void Dispose()
         {
-            lock (notifiers)
+            lock(notifiers)
             {
                 if (!isDisposed)
                 {
@@ -192,12 +190,12 @@ namespace UniRx
 
             public void Dispose()
             {
-                lock (parent.notifiers)
+                lock(parent.notifiers)
                 {
                     object _notifier;
                     if (parent.notifiers.TryGetValue(typeof(T), out _notifier))
                     {
-                        var notifier = (ImmutableList<Func<T, IObservable<Unit>>>)_notifier;
+                        var notifier = (ImmutableList<Func<T, IObservable<Unit>>>) _notifier;
                         notifier = notifier.Remove(asyncMessageReceiver);
 
                         parent.notifiers[typeof(T)] = notifier;

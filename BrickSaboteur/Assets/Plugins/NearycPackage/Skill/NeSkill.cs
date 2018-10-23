@@ -76,29 +76,15 @@ namespace Nearyc.Skill
     {
         [SerializeField] protected PropertyFloat _cooldown;
         public PropertyFloat Cooldown => _cooldown;
-        // ---------------------------------
-        // [SerializeField] PropertyFloat _duration;
-        // public PropertyFloat Duration => _duration;
-        // ---------------------------------
         [SerializeField] protected ESkillTag _type;
         public ESkillTag type => _type;
-        // ---------------------------------
         protected bool _isTryExecute;
-        // [SerializeField] bool _isInUse;
-        // public bool IsInUse => _isInUse;
-        // ---------------------------------
         protected bool _canUse = true;
         public bool Canuse => _canUse;
-        // ---------------------------------
         public System.Action onSkillStart { get; set; }
-        // public System.Action onSkillUpdate;
-        // public System.Action onSkillEnd;
-        // ---------------------------------
         public NeSkill(Component addToDispose, ESkillTag type, float cooldown = 0)
         {
-            // var tempC = cooldown.HasValue?cooldown.Value : 0;
             _cooldown.Init(cooldown);
-            // _duration.Init(duration);
             _type = type;
         }
         public virtual void TryExecuteSKill(bool condition)

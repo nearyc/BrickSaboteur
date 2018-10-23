@@ -42,17 +42,5 @@ namespace BrickSaboteur
             _midTrigger.isTrigger = true;
             //Todo Generate ----
         }
-        bool triggered;
-        //人物到中间时，生成下一个网格
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            // var player = other.GetComponent<BoardEntity>();
-            // if (player != null && !triggered)
-            // {
-
-            //     triggered = true;
-            //     MgrM.GridManager.GenerateNext();
-            // }
-        }
     }
 }

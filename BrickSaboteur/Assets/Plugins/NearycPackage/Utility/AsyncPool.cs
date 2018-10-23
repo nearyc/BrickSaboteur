@@ -67,7 +67,7 @@ namespace Nearyc.Utility
         public Transform parent;
         public bool setInActiveWhenReturn { get; set; } = true;
         bool isDisposed = false;
-        [Sirenix.OdinInspector.ShowInInspector] 
+        [Sirenix.OdinInspector.ShowInInspector]
         Queue<T> q;
         public int MaxCount { get; set; }
         protected GameObject prefab;
@@ -178,18 +178,6 @@ namespace Nearyc.Utility
                 var instance = CreateInstanceAsync();
                 return instance.Do(x => OnBeforeRent(x));
             }
-        }
-        T temp;
-        public IEnumerator Test(object key)
-        {
-            var a = Addressables.Instantiate<T>(key);
-            yield return a;
-            temp = a.Result;
-            var c = Observable.Return(temp);
-            Observable.EveryUpdate()
-                .Where(__ => a.IsDone)
-                .Take(1)
-                .Subscribe(x => Debug.Log(123));
         }
         /// <summary>
         /// Return instance to pool.

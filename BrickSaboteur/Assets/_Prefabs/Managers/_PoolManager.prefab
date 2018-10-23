@@ -81,21 +81,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd61c83b98c0ef547bab2a4d5e2232fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: _moduleElementDict
-      Entry: 6
-      Data: 
-    - Name: _pools
-      Entry: 6
-      Data: 
 --- !u!114 &114533598649863662
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -107,16 +92,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0665822f38b334343823faeecb9f7105, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: pool
-      Entry: 6
-      Data: 
-  _isInited: 0

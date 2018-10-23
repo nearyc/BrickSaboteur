@@ -21,7 +21,7 @@ namespace Nearyc.Skill
         float basee;
         [SerializeField] float max;
         float min;
-        public float Current => current.Value;
+       [Sirenix.OdinInspector.ShowInInspector] public float Current => current.Value;
         private FloatReactiveProperty current;
         public FloatReactiveProperty percent => new FloatReactiveProperty((float) current.Value / max);
         List<PropertyNode<float>> adds;

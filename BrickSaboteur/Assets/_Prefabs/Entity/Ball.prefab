@@ -21,8 +21,8 @@ GameObject:
   - component: {fileID: 4965821516128650}
   - component: {fileID: 212810156506969886}
   - component: {fileID: 58568958053659768}
-  - component: {fileID: 50804259184361142}
   - component: {fileID: 114325959291837144}
+  - component: {fileID: 50697079637804674}
   m_Layer: 10
   m_Name: Ball
   m_TagString: Untagged
@@ -43,7 +43,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
---- !u!50 &50804259184361142
+--- !u!50 &50697079637804674
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 1
@@ -57,11 +57,11 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 0
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 0
-  m_SleepingMode: 0
-  m_CollisionDetection: 1
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
   m_Constraints: 0
 --- !u!58 &58568958053659768
 CircleCollider2D:
@@ -89,16 +89,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c55509bb26e0f124a9e7e818af8e9a85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
-  _isInited: 1
   initSpeed: 7
   rb: {fileID: 0}
 --- !u!212 &212810156506969886

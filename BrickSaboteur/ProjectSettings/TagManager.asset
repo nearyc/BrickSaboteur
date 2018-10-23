@@ -17,9 +17,9 @@ TagManager:
   - Player
   - Ball
   - Brick
-  - 
-  - 
-  - 
+  - Bonus
+  - DieArea
+  - Board
   - 
   - 
   - 

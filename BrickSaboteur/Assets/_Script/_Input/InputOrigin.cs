@@ -20,9 +20,6 @@ namespace BrickSaboteur
     /// <summary>
     /// 原始输入静态，从这里调用输入数据
     /// </summary>
-    //* 简写说明 
-    //* B--Button
-    //* Dir-Direction
     public static class InputOrigin
     {
         public static Vector3 delta = new Vector3();

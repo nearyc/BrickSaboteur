@@ -18,13 +18,18 @@ using UniRx;
 using UnityEngine;
 namespace BrickSaboteur
 {
-    public class SkillHolder : ElementBaseSingle<SkillHolder, IInputTag>
+    /// <summary>
+    /// 管理技能和属性，后期考虑拆分
+    /// </summary>
+    /// <typeparam name="SkillHolder"></typeparam>
+    /// <typeparam name="IInputTag"></typeparam>
+    public class SkillHolder : ElementBaseSingle<SkillHolder, IPropertyTag>
     {
         [SerializeField] NormalSKill plus;
         [SerializeField] public Property plusCount;
         [SerializeField] NormalSKill multiply;
         [SerializeField] public Property multiplyCount;
-        [SerializeField] public Property lifeCount;
+        [SerializeField] public Property HealthCount;
 
         protected override void OnDestroy()
         {
@@ -32,34 +37,67 @@ namespace BrickSaboteur
         }
         protected override IEnumerator AfterStart()
         {
-            yield return null;
             this.RegisterSelf(this);
-
-            plusCount.Init(20);
-            multiplyCount.Init(20);
-            lifeCount.Init(3);
-
-            plus = new NormalSKill(this, ESkillTag.Attack, 0.5f);
+            yield return null;
+            //初始化数据
+            plusCount.Init(100, PlayerPrefs.GetInt(PlayerPrefKey.PlusCount, 5));
+            multiplyCount.Init(100, PlayerPrefs.GetInt(PlayerPrefKey.MultiplyCount, 5));
+            //创建plus技能
+            plus = new NormalSKill(this, ESkillTag.Node, 0.5f);
             plus.onSkillStart += PlusSKillExecute;
-
-            multiply = new NormalSKill(this, ESkillTag.Attack, 0.5f);
+            //创建multiply技能
+            multiply = new NormalSKill(this, ESkillTag.Node, 0.5f);
             multiply.onSkillStart += MultiplySkillExecute;
+            Observable.EveryUpdate().Subscribe(__ =>
+            {
+                plus.OnUpdate();
+                multiply.OnUpdate();
+            });
+            //改变生命
+            MessageBroker.Default.Receive<Tag_ModifyHealth>().Subscribe(x => ModifyHealth(x.value)).AddTo(this);
+            //延迟推送生命
+            MessageBroker.Default.Receive<Tag_GameStart>().Subscribe(x =>
+            {
+                HealthCount.Init(3);
+                Observable.Timer(System.TimeSpan.FromMilliseconds(600))
+                    .Subscribe(__ => MessageBroker.Default.Publish(new Tag_ModifyHealth(HealthCount.CurrentValue, true)));
+            }).AddTo(this);;
+            //释放协程
+            MessageBroker.Default.Receive<Tag_BackToMenu>().Subscribe(x =>
+            {
+                if (_tempStream != null) _tempStream.Dispose();
+            }).AddTo(this);;
+            //释放协程
+            MessageBroker.Default.Receive<Tag_GameEnd>().Subscribe(x =>
+            {
+                if (_tempStream != null) _tempStream.Dispose();
+            }).AddTo(this);;
+            //游戏结束判断，如果生命值小于0
+            this.ObserveEveryValueChanged(x => x.HealthCount.CurrentValue).Where(x => x < 1)
+                .Subscribe(__ => BrickMgrM.LoaderManager.GameEnd(false)).AddTo(this);
         }
-
-		public void TryExecuteMultiply()
+        //TEST
+        private void Update()
         {
-            multiply.TryExecuteSKill(multiplyCount.Current > 1);
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                ModifyPlus(5);
+                ModufyMultiply(5);
+            }
+        }
+        public void TryExecuteMultiply()
+        {
+            multiply.TryExecuteSKill(multiplyCount.CurrentValue > 0);
         }
         public void TryExecutePlus()
         {
-            plus.TryExecuteSKill(plusCount.Current > 1);
+            plus.TryExecuteSKill(plusCount.CurrentValue > 0);
         }
         private void PlusSKillExecute()
         {
-            plusCount.ModifyCurrent(-1);
+            ModifyPlus(-1);
             for (int i = 0; i < 3; i++)
             {
-
                 BrickMgrM.PoolModule.GetPool<BallEntity>()
                     .RentAsync()
                     .Subscribe(x =>
@@ -69,23 +107,44 @@ namespace BrickSaboteur
                     });
             }
         }
+        private void ModifyHealth(int amoumt)
+        {
+            HealthCount.ModifyCurrent(amoumt);
+        }
+        private void ModifyPlus(int amount)
+        {
+            plusCount.ModifyCurrent(amount);
+            PlayerPrefs.SetInt(PlayerPrefKey.PlusCount, plusCount.CurrentValue);
+        }
+        private void ModufyMultiply(int amount)
+        {
+            multiplyCount.ModifyCurrent(amount);
+            PlayerPrefs.SetInt(PlayerPrefKey.MultiplyCount, multiplyCount.CurrentValue);
+        }
+        /// <summary>
+        /// 限定最多只有一个协程
+        /// </summary>
+        System.IDisposable _tempStream;
         private void MultiplySkillExecute()
         {
-
-            if (temp != null)
-                temp.Dispose();
-            temp = Observable.FromCoroutine(MultiplyAsync).Subscribe().AddTo(this);
+            if (_tempStream != null)
+                _tempStream.Dispose();
+            _tempStream = Observable.FromCoroutine(MultiplyAsync).Subscribe().AddTo(this);
         }
-        System.IDisposable temp;
+        /// <summary>
+        /// 每帧最多生成50个小球
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator MultiplyAsync()
         {
-            multiplyCount.ModifyCurrent(-1);
+            ModufyMultiply(-1);
             var tempList = ListPool<BallEntity>.Allocate();
             var counter = 0;
             foreach (var item in BrickMgrM.EntityModule.balls)
             {
                 tempList.Add(item);
             }
+            yield return null;
             foreach (var item in tempList)
             {
                 if (item.gameObject.activeInHierarchy == true)
@@ -109,7 +168,7 @@ namespace BrickSaboteur
                         });
                     counter++;
                 }
-                if (counter > 10)
+                if (counter > 50)
                 {
                     counter = 0;
                     yield return null;

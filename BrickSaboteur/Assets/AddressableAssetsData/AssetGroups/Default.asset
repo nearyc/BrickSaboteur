@@ -26,11 +26,11 @@ MonoBehaviour:
     m_readOnly: 0
     m_serializedLabels:
     - Entity
-  - m_guid: f1c8e462967850d48bf87c70e095c583
+  - m_guid: 9e1edfb93f865c441b4eff56fca6cf26
     m_address: Assets/_Prefabs/Level
     m_readOnly: 0
     m_serializedLabels:
-    - Grids
+    - Level
   m_readOnly: 0
   m_settings: {fileID: 11400000, guid: 504c9cf66fc75ea44b7dc84ead805c0b, type: 2}
   m_schemaSet:

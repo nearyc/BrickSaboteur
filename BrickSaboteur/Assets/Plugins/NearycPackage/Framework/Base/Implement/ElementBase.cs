@@ -24,7 +24,8 @@ namespace NearyFrame.Base
     /// <typeparam name="Tag"></typeparam>
     public abstract class ElementBase<Tag> : ElementBase where Tag : IModuleTag<Tag>
     {
-        [SerializeField] protected bool _isInited = false;
+		[SerializeField]
+		protected bool _isInited => Mgr.Instance.IsInited;
         protected virtual System.Collections.IEnumerator Start()
         {
             yield return OnStart();
@@ -40,7 +41,6 @@ namespace NearyFrame.Base
                     throw new TagWrongException(typeof(Tag).Name + " --Tag错误");
                 }
             }
-            _isInited = true;
         }
         protected abstract System.Collections.IEnumerator OnStart();
     }

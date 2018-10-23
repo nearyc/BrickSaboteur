@@ -15,6 +15,10 @@ using NearyFrame.Base;
 using UnityEngine;
 namespace BrickSaboteur
 {
+    /// <summary>
+    /// 小球和Bonus的死亡区域
+    /// </summary>
+    /// <typeparam name="IEntityTag"></typeparam>
     public class DieAreaEntity : ElementBase<IEntityTag>
     {
 
@@ -25,15 +29,19 @@ namespace BrickSaboteur
         private void OnTriggerEnter2D(Collider2D other)
         {
             var ball = other.GetComponent<BallEntity>();
-            if (other != null)
+            if (ball != null)
             {
                 BrickMgrM.PoolModule.GetPool<BallEntity>().Return(ball);
             }
         }
+        /// <summary>
+        /// 防止enter没成功
+        /// </summary>
+        /// <param name="other"></param>
         private void OnTriggerStay2D(Collider2D other)
         {
             var ball = other.GetComponent<BallEntity>();
-            if (other != null)
+            if (ball != null)
             {
                 BrickMgrM.PoolModule.GetPool<BallEntity>().Return(ball);
             }

@@ -20,6 +20,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 343f99060a50f8e4688e1ec5b3883ea9, type: 2}
   - {fileID: 11400000, guid: cd301c493f011bd4ba90cae1cf9544b8, type: 2}
   - {fileID: 11400000, guid: 79e81f736c9a2444ab569760bc16dabd, type: 2}
+  - {fileID: 11400000, guid: 1d860508126183e4d8746d157c96842e, type: 2}
   m_buildSettings:
     m_compression:
       compression: 3
@@ -47,7 +48,7 @@ MonoBehaviour:
         m_value: http://localhost/[BuildTarget]
     - m_inheritedParent: 
       m_id: a390f79824ca7a0439d1f4a2910ee944
-      m_profileName: Editor
+      m_profileName: Editor&Windows
       m_values:
       - m_id: 86d1a630f09902f49828148502c6c08a
         m_value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
@@ -112,11 +113,11 @@ MonoBehaviour:
     - Managers
     - Scene
     - Enviroment
-    - UIWorldRoot
-    - UIMainRoot
     - Pool
     - Bonus
-    - Grids
+    - Level
+    - UIMainRoot
+    - UIGameRoot
   m_schemaTemplates:
   - m_displayName: Packed Assets
     m_description: Pack asset sinto asset bundles.

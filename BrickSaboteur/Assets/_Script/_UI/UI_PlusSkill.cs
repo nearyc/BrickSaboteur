@@ -18,6 +18,11 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace BrickSaboteur
 {
+    /// <summary>
+    /// PLUS技能的Presenter
+    /// </summary>
+    /// <typeparam name="UI_PlusSkill"></typeparam>
+    /// <typeparam name="IUITag"></typeparam>
     public class UI_PlusSkill : ElementBaseSingle<UI_PlusSkill, IUITag>
     {
         [SerializeField] Text countText;
@@ -34,18 +39,14 @@ namespace BrickSaboteur
 
             countText = countText.GetComponentFromDescendants(this, nameof(countText));
             skillButton = skillButton.GetComponentFromChildren(this, nameof(skillButton));
-            yield return BrickMgrM.WaitModule<IInputTag>();
+            yield return BrickMgrM.WaitModule<IPropertyTag>();
             yield return new WaitForSeconds(0.1f);
-            skillHolder = BrickMgrM.InputModule.GetElement<SkillHolder>();
+            skillHolder = BrickMgrM.PeropertyModule.GetElement<SkillHolder>();
 
-            skillButton.OnClickAsObservable()
-                .Subscribe(__ => skillHolder.TryExecutePlus()).AddTo(this);
+            //按下按键尝试释放
+            skillButton.OnClickAsObservable().Subscribe(__ => skillHolder.TryExecutePlus()).AddTo(this);
+            //更新数字
+            skillHolder.plusCount.current.SubscribeToText(countText).AddTo(this);
         }
-        private void Update()
-        {
-            if (!_isInited) return;
-            countText.text = skillHolder.plusCount.Current.ToString();
-        }
-
     }
 }

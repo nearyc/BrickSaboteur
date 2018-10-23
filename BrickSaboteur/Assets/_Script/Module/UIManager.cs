@@ -10,8 +10,10 @@
 //===================================================
 
 #endregion
+using System.Collections;
 using NearyFrame;
 using NearyFrame.Base;
+using UniRx;
 using Unity.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -28,6 +30,7 @@ namespace BrickSaboteur
     {
         public Canvas mainHudCanvas;
         public Canvas worldHudCanvas;
+        [SerializeField] bool isGameHudInited = false;
         protected override void OnDestroy()
         {
             Mgr.Instance.UnRegisterModule(this);
@@ -45,8 +48,39 @@ namespace BrickSaboteur
             worldHudCanvas.worldCamera = BrickMgrM.CameraManager.mainCam;
             var mainHudTran = mainHudCanvas.transform;
             var worldHudTran = worldHudCanvas.transform;
-            // BrickMgrM.LoaderManager.InstantiateAll<GameObject>("UIMainRoot", mainHudTran).Subscribe(null);
-            // yield return BrickMgrM.LoaderManager.InstantiateAll<GameObject>("UIWorldRoot", worldHudTran);
+            //游戏开始，加载关卡
+            MessageBroker.Default.Receive<Tag_GameStart>().Subscribe(x => LoadGameUI()).AddTo(this);;
+            //游戏结束，弹出窗口
+            MessageBroker.Default.Receive<Tag_GameEnd>().Subscribe(x => GameEnd(x.isWinorNot)).AddTo(this);;
+            //回到主菜单,清理InGameUI
+            MessageBroker.Default.Receive<Tag_BackToMenu>().Subscribe(__ => BackToMenu()).AddTo(this);;
+        }
+        private void LoadGameUI()
+        {
+            worldHudCanvas.gameObject.Children().ForEach(x => BrickMgrM.LoaderManager.ReleaseObject(x.gameObject));
+            // BrickMgrM.LoaderManager.InstantiateAll<GameObject>("UIGameRoot", worldHudCanvas.transform, null).Subscribe();
+            //  BrickMgrM.LoaderManager.InstantiatePrefabByPath<GameObject>("UI/GmaeUI/HealthRoot", worldHudCanvas.transform, null).Subscribe();
+            // BrickMgrM.LoaderManager.InstantiatePrefabByPath<GameObject>("UI/GmaeUI/InputArea", worldHudCanvas.transform, null).Subscribe();
+            // BrickMgrM.LoaderManager.InstantiatePrefabByPath<GameObject>("UI/GmaeUI/MultiplySkillRoot", worldHudCanvas.transform, null).Subscribe();
+            // BrickMgrM.LoaderManager.InstantiatePrefabByPath<GameObject>("UI/GmaeUI/PlusSkillRoot", worldHudCanvas.transform, null).Subscribe();
+        }
+        private void GameEnd(bool isWInOrNot)
+        {
+            if (isWInOrNot == true)
+            {
+                //TODO
+                Debug.Log("YOU WIN !");
+            }
+            else
+            {
+                //TODO
+                Debug.Log("YOU Lose !");
+            }
+        }
+        private void BackToMenu()
+        {
+            //TODO
+            worldHudCanvas.gameObject.Children().ForEach(x => BrickMgrM.LoaderManager.ReleaseObject(x.gameObject));
         }
     }
 }

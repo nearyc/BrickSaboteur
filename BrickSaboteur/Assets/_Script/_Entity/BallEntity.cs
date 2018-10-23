@@ -14,9 +14,13 @@ using NearyFrame.Base;
 using UnityEngine;
 namespace BrickSaboteur
 {
+    /// <summary>
+    /// 小球
+    /// </summary>
+    /// <typeparam name="IEntityTag"></typeparam>
     public class BallEntity : ElementBase<IEntityTag>
     {
-        [SerializeField][Range(5, 10)] public float initSpeed = 5;
+        [Range(5, 10)] public float initSpeed = 5;
         CircleCollider2D _collider;
         public Rigidbody2D rb;
         protected override System.Collections.IEnumerator OnStart()
@@ -30,6 +34,11 @@ namespace BrickSaboteur
 
             //Init(Vector3.zero, new Vector3(0, 0, -180));
         }
+        /// <summary>
+        /// 初始化角度和位置
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <param name="rotation"></param>
         public void Init(Vector3 pos, Vector3 rotation)
         {
             transform.position = pos;
@@ -46,6 +55,10 @@ namespace BrickSaboteur
         {
             BrickMgrM.EntityModule.UnRegisteBall(this);
         }
+        /// <summary>
+        /// 碰到LevelTile就删除对应位置的Tile
+        /// </summary>
+        /// <param name="other"></param>
         private void OnCollisionEnter2D(Collision2D other)
         {
             var level = other.transform.GetComponent<LevelTileEntity>();

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.unity.2d.pixel-perfect": "1.0.1-preview",
     "com.unity.addressables": "0.4.6-preview",
     "com.unity.assetbundlebrowser": "1.7.0",
     "com.unity.package-manager-ui": "1.9.11",

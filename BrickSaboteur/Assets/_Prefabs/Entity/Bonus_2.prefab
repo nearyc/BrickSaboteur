@@ -22,7 +22,8 @@ GameObject:
   - component: {fileID: 212899553891889856}
   - component: {fileID: 114749919603221310}
   - component: {fileID: 61987660154990374}
-  m_Layer: 0
+  - component: {fileID: 50219281642736200}
+  m_Layer: 12
   m_Name: Bonus_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,6 +43,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &50219281642736200
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1693963716576486}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!61 &61987660154990374
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -78,16 +99,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b23ff3a41dc429a40b9117e2cc3a8d7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
-  _isInited: 0
   type: 2
   skillHolder: {fileID: 0}
   _speed: 1

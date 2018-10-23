@@ -18,7 +18,7 @@ namespace NearyFrame.Base
     public class BrickMgrM
     {
         public static UIManager UIModule => Mgr.Instance.GetModule<IUITag>() as UIManager;
-        public static InputManager InputModule => Mgr.Instance.GetModule<IInputTag>() as InputManager;
+        public static PropertyManager PeropertyModule => Mgr.Instance.GetModule<IPropertyTag>() as PropertyManager;
         public static EntityManager EntityModule => Mgr.Instance.GetModule<IEntityTag>() as EntityManager;
         public static PoolManager PoolModule => Mgr.Instance.GetModule<IPoolTag>() as PoolManager;
         public static LoaderManager LoaderManager => Mgr.Instance.GetModule<ILoaderTag>() as LoaderManager;

@@ -25,7 +25,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.Tilemaps;
 namespace BrickSaboteur
 {
-    /// <summary> 挡板 </summary>
+    /// <summary> 挡板，考虑改名Slider </summary>
 
     public class BoardEntity : ElementBase<IEntityTag>
     {
@@ -41,25 +41,6 @@ namespace BrickSaboteur
         private void OnDestroy()
         {
             BrickMgrM.EntityModule.UnRegisteBoard(this);
-        }
-        float _moveX;
-        private void Update()
-        {
-            // transform.position += InputOrigin.delta;
-            // transform.Rotate(new Vector3(0, 0, 20));
-        }
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            // var ball = other.gameObject.GetComponent<BallEntity>();
-            // if (ball != null)
-            // {
-            //     var half = _collider.size.x / 2;
-            //     var offset = -(transform.position - other.transform.position).x;
-            //     var offsetAngle = Mathf.Rad2Deg * Mathf.PI * offset / half / 2;
-            //     var angle = 180 - offsetAngle;
-            //     ball.transform.Rotate(0, 0, angle);
-            //     ball.rb.velocity = ball.transform.up * ball.initSpeed;
-            // }
         }
     }
 }

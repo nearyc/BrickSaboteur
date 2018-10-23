@@ -21,6 +21,8 @@ namespace NearyFrame.Base
     /// </summary>
     public class Mgr : MonoBehaviour, ISingleton
     {
+		[Sirenix.OdinInspector.ShowInInspector]
+		public bool IsInited { get; private set; } = false;
         #region Singleton
         private Mgr() { }
         public static Mgr Instance { get; private set; }
@@ -28,6 +30,7 @@ namespace NearyFrame.Base
         {
             Singleton();
             _moduleDict = new Dictionary<Type, IModule>();
+			Invoke("Inited", 1);
         }
         public void Singleton()
         {
@@ -41,8 +44,12 @@ namespace NearyFrame.Base
                 Destroy(gameObject);
             }
         }
+		private void Inited()
+		{
+			IsInited = true;
+		}
         #endregion
-        // [Sirenix.Serialization.OdinSerialize] 
+        [Sirenix.OdinInspector.ShowInInspector] 
         private Dictionary<Type, IModule> _moduleDict;
         /// <summary>
         /// 注册模块
