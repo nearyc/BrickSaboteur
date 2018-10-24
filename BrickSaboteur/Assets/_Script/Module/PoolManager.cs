@@ -21,13 +21,24 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 namespace BrickSaboteur
 {
-    public interface IPoolTag : IModuleTag<IPoolTag> { }
+    public interface IPoolTag : IModuleTag<IPoolTag>
+    {
+
+        AsyncPool<U> GetOrCreate<U>(GameObject prefab, string key = null, Func<IObservable<U>> createFunc = null, int maxCount = 1000) where U : Component;
+#if USE_ADDRESSABLE
+        AsyncPool<U> GetOrCreate<U>(AssetReference refer, string key = null, Func<IObservable<U>> createFunc = null, int maxCount = 1000) where U : Component;
+#endif
+        AsyncPool<U> GetOrCreate<U>(string referPath, string key = null, Func<IObservable<U>> createFunc = null, int maxCount = 1000) where U : Component;
+        AsyncPool<U> GetPool<U>(string key = null) where U : Component;
+        AsyncPool<U> GetOrCreateFunc<U>(Func<IObservable<U>> createInstanceAsync, string key = null, int maxCount = 1000) where U : Component;
+        void ReleasePool<U>(string key = null) where U : Component;
+    }
     /// <summary>
     /// 物品池管理
     /// </summary>
     /// <typeparam name="PoolManager">Self</typeparam>
     /// <typeparam name="IPoolTag">Tag</typeparam>
-    public class PoolManager : ManagerBase<PoolManager, IPoolTag>
+    public class PoolManager : ManagerBase<PoolManager, IPoolTag>, IPoolTag
     {
         #region Base
         protected override void OnDestroy()
@@ -38,11 +49,12 @@ namespace BrickSaboteur
 
         protected override System.Collections.IEnumerator OnInitializeRegisterSelf()
         {
-            Mgr.Instance.RegisterModule(this);
-            Debug.Log("Create PoolManager");
-            yield return null;
 
             _moduleElementDict = null; //   用不到
+            yield return null;
+
+            Mgr.Instance.RegisterModule(this);
+            Debug.Log("Create PoolManager");
         }
         #endregion
         [Sirenix.OdinInspector.ShowInInspector] Dictionary<string, AsyncPool> _pools;
@@ -51,7 +63,7 @@ namespace BrickSaboteur
         /// </summary>
         /// <typeparam name="U"></typeparam>
         /// <returns></returns>
-        public AsyncPool<U> GetOrCreate<U>(GameObject prefab, string key = null, Func<IObservable<U>> createFunc = null, int maxCount = 100) where U : Component
+        public AsyncPool<U> GetOrCreate<U>(GameObject prefab, string key = null, Func<IObservable<U>> createFunc = null, int maxCount = 1000) where U : Component
         {
             if (_pools == null)
                 _pools = new Dictionary<string, AsyncPool>();
@@ -68,7 +80,8 @@ namespace BrickSaboteur
                 return pool;
             }
         }
-        public AsyncPool<U> GetOrCreate<U>(AssetReference refer, string key = null, Func<IObservable<U>> createFunc = null, int maxCount = 100) where U : Component
+#if USE_ADDRESSABLE
+        public AsyncPool<U> GetOrCreate<U>(AssetReference refer, string key = null, Func<IObservable<U>> createFunc = null, int maxCount = 1000) where U : Component
         {
             if (_pools == null)
                 _pools = new Dictionary<string, AsyncPool>();
@@ -86,9 +99,10 @@ namespace BrickSaboteur
             }
         }
 
+#endif
         [Sirenix.OdinInspector.ShowInInspector] private string _prefabPrefix => AddressablePathEx.PREFAB_PREFIX;
         [Sirenix.OdinInspector.ShowInInspector] private string _prefabSuffix => AddressablePathEx.PREFAB_SUFFIX;
-        public AsyncPool<U> GetOrCreate<U>(string referPath, string key = null, Func<IObservable<U>> createFunc = null, int maxCount = 100) where U : Component
+        public AsyncPool<U> GetOrCreate<U>(string referPath, string key = null, Func<IObservable<U>> createFunc = null, int maxCount = 1000) where U : Component
         {
             if (_pools == null)
                 _pools = new Dictionary<string, AsyncPool>();
@@ -106,7 +120,7 @@ namespace BrickSaboteur
                 return pool;
             }
         }
-        public AsyncPool<U> GetOrCreateFunc<U>(Func<IObservable<U>> createInstanceAsync, string key = null, int maxCount = 100) where U : Component
+        public AsyncPool<U> GetOrCreateFunc<U>(Func<IObservable<U>> createInstanceAsync, string key = null, int maxCount = 1000) where U : Component
         {
             if (_pools == null)
                 _pools = new Dictionary<string, AsyncPool>();

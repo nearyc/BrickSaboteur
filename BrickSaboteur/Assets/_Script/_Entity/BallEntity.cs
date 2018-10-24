@@ -31,7 +31,6 @@ namespace BrickSaboteur
 
             BrickMgrM.EntityModule.RegisteBall(this);
             rb.gravityScale = 0;
-
             //Init(Vector3.zero, new Vector3(0, 0, -180));
         }
         /// <summary>
@@ -39,12 +38,13 @@ namespace BrickSaboteur
         /// </summary>
         /// <param name="pos"></param>
         /// <param name="rotation"></param>
-        public void Init(Vector3 pos, Vector3 rotation)
+        public void Init(Vector3 pos, Vector3 rotation, float? speed = null)
         {
             transform.position = pos;
             transform.localRotation = Quaternion.Euler(rotation);
             if (rb == null) rb = GetComponent<Rigidbody2D>();
-            rb.velocity = transform.up * initSpeed;
+            var modifier = speed.HasValue?speed.Value : initSpeed;
+            rb.velocity = transform.up * modifier;
         }
         private void OnEnable()
         {
@@ -67,7 +67,7 @@ namespace BrickSaboteur
                 foreach (var contact in other.contacts)
                 {
                     var point = (Vector2) contact.point;
-                    point += this.rb.velocity.normalized * -0.05f;
+                    point += this.rb.velocity.normalized * -0.02f;
                     BrickMgrM.GridManager.ReleaseTileWorldPos(point);
                 }
             }

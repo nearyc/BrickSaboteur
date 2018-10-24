@@ -17,12 +17,47 @@ using System.Threading;
 using UniRx;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+#if USE_ADDRESSABLE
 using UnityEngine.ResourceManagement;
+#endif
 namespace UniRx
 {
     public static class ObservableAddressables
     {
+        /// <summary>Instantiate</summary>
+        public static System.IObservable<GameObject> ResourcesInstantiate<T>(object key, Action<AsyncOperation> onCompleted = null)
+        where T : UnityEngine.Object
+        {
+
+            // Addressables.Instantiate<T>(key)
+            return Observable.FromCoroutine<GameObject>((observer, token) =>
+            {
+                return ResourcesInstantiateCore<T>(key, observer, token, onCompleted);
+            });
+        }
+        private static IEnumerator ResourcesInstantiateCore<T>(
+            object key, IObserver<GameObject> observer, CancellationToken token, Action<AsyncOperation> onCompleted = null)
+        where T : UnityEngine.Object
+        {
+            var aop = Resources.LoadAsync(key.ToString(), typeof(T));
+            if (onCompleted != null)
+            {
+                aop.completed += onCompleted;
+            }
+
+            while (!aop.isDone && !token.IsCancellationRequested)
+            {
+                // Debug.Log(1);
+                yield return null;
+            }
+            if (token.IsCancellationRequested) yield break;
+            var obj = GameObject.Instantiate<GameObject>(aop.asset as GameObject);
+            observer.OnNext(obj);
+            observer.OnCompleted();
+        }
+#if USE_ADDRESSABLE
         /// <summary>ReleaseInstance</summary>
+        /// 
         public static void ReleaseAsset<T>(T obj) where T : UnityEngine.Object
         {
             Addressables.ReleaseAsset<T>(obj);
@@ -147,5 +182,6 @@ namespace UniRx
             observer.OnNext(aop.Result);
             observer.OnCompleted();
         }
+#endif
     }
 }

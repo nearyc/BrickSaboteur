@@ -19,16 +19,19 @@ using NearyFrame.Base;
 using UniRx;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+#if USE_ADDRESSABLE
 using UnityEngine.ResourceManagement;
+#endif
 using UnityEngine.SceneManagement;
 namespace BrickSaboteur
 {
-
+#if USE_ADDRESSABLE
     [System.Serializable]
     public class Refer : AssetReference
     {
 
     }
+#endif
     public enum EDifficulty
     {
         Eazy = 1,
@@ -41,12 +44,9 @@ namespace BrickSaboteur
     /// </summary>
     /// <typeparam name="LoaderManager">Self</typeparam>
     /// <typeparam name="ILoaderTag">Tag</typeparam>
-    public class LoaderManager : ManagerBase<LoaderManager, ILoaderTag>
+    public class LoaderManager : ManagerBase<LoaderManager, ILoaderTag>, ILoaderTag
     {
-        public EDifficulty lastDifficulty; //上次游戏的难度
-        public int lastLevel; //上次游戏的关卡数
         //TODO Game State
-        public bool isInGameState = false; //游戏状态
         [Sirenix.OdinInspector.ShowInInspector] private string _prefabPrefix => AddressablePathEx.PREFAB_PREFIX;
         [Sirenix.OdinInspector.ShowInInspector] private string _prefabSuffix => AddressablePathEx.PREFAB_SUFFIX;
         [SerializeField] private int sceneIndex = 0;
@@ -61,59 +61,53 @@ namespace BrickSaboteur
             isLoaded = false;
             Mgr.Instance.RegisterModule(this);
             Debug.Log("Create LoaderManager");
-            gameObject.AddComponent<PropertyManager>();
-            gameObject.AddComponent<SkillHolder>();
-
-            lastDifficulty = (EDifficulty) PlayerPrefs.GetInt("EDifficulty", 1);
-            lastLevel = PlayerPrefs.GetInt("Level", 1);
-
-            GameStart(1, EDifficulty.Eazy);
-            //游戏结束，设置状态为false
-            MessageBroker.Default.Receive<Tag_GameEnd>().Subscribe(__ => isInGameState = false).AddTo(this);
-            //回到主菜单，设置状态为false
-            MessageBroker.Default.Receive<Tag_BackToMenu>().Subscribe(__ => isInGameState = false).AddTo(this);
-
+            yield return BrickMgrM.WaitModule<IPropertyTag>();
+            //TEST
+            BackToMainMenu();
             yield return new WaitForSeconds(1);
             isLoaded = true;
         }
         //游戏开始,1和2都对应游戏scene
         public void GameStart(int level, EDifficulty difficulty)
         {
+            levelIndex = level;
             if (sceneIndex != 1)
-                LoadScene(1).Completed += __ =>
+                LoadSceneByNum(1).Last().Subscribe(__ =>
                 {
-                    MessageBroker.Default.Publish(new Tag_GameStart(level, difficulty));
+                    MessageBroker.Default.Publish(new GameTag_GameStart(level, difficulty));
                     sceneIndex = 1;
-                    levelIndex++;
-                };
+                    // levelIndex++;
+                });
             else
             {
-                LoadScene(2).Completed += __ =>
+                LoadSceneByNum(2).Last().Subscribe(__ =>
                 {
-                    MessageBroker.Default.Publish(new Tag_GameStart(level, difficulty));
+                    MessageBroker.Default.Publish(new GameTag_GameStart(level, difficulty));
                     sceneIndex = 2;
-                    levelIndex++;
-                };
+                    // levelIndex++;
+                });
             }
         }
         //游戏结束
         public void GameEnd(bool isWin)
         {
+            Debug.Log("GameEnd");
             //TODO
-            MessageBroker.Default.Publish(new Tag_GameEnd(isWin));
+            MessageBroker.Default.Publish(new GameTag_GameEnd(isWin));
             //test
-            GameStart(levelIndex, EDifficulty.Eazy);
+            GameStart(++levelIndex, EDifficulty.Eazy);
         }
         //回到主菜单，3对应主菜单scene
         public void BackToMainMenu()
         {
-            LoadScene(3).Completed += x =>
+            LoadSceneByNum(3).Last().Subscribe(__ =>
             {
-                MessageBroker.Default.Publish(new Tag_BackToMenu());
-            };
+                MessageBroker.Default.Publish(new GameTag_BackToMenu());
+            });
         }
         #region Addressable
         // ---------------------------------
+#if USE_ADDRESSABLE
         public System.IObservable<IList<T>> InstantiateAll<T>(object key, Transform parentTran,
             Action<UnityEngine.ResourceManagement.IAsyncOperation<T>> onSingleCompleted = null,
             Action<IAsyncOperation<IList<T>>> onCompleted = null)
@@ -128,14 +122,30 @@ namespace BrickSaboteur
         {
             return ObservableAddressables.Instantiate<T>(key, parentTran, onCompleted, isWorldSpace);;
         }
-        public System.IObservable<T> InstantiatePrefabByPath<T>(string path, Transform parentTran, Action<IAsyncOperation<T>> onCompleted = null, bool isWorldSpace = false)
+        public System.IObservable<T> InstantiatePrefabByPath<T>(string path, Transform parentTran,
+            Action<IAsyncOperation<T>> onCompleted = null,
+            bool isWorldSpace = false)
         where T : UnityEngine.Object
         {
-            var fullPath = $"{_prefabPrefix}{path}{_prefabSuffix}";
+            var fullPath = $"{_prefabPrefix}{path}";
 
             return ObservableAddressables.Instantiate<T>(fullPath, parentTran, onCompleted, isWorldSpace);
         }
+#else
+        public System.IObservable<GameObject> InstantiatePrefabByPath<T>(string path,
+            Action<AsyncOperation> onCompleted = null,
+            // Action<IAsyncOperation<T>> onCompleted = null,
+            bool isWorldSpace = false)
+        where T : UnityEngine.Object
+        {
+            var fullPath = $"{_prefabPrefix}{path}";
+
+            // return ObservableAddressables.Instantiate<T>(fullPath, parentTran, onCompleted, isWorldSpace);
+            return ObservableAddressables.ResourcesInstantiate<T>(fullPath, onCompleted);
+        }
+#endif
         // ---------------------------------
+#if USE_ADDRESSABLE
         public System.IObservable<IList<T>> LoadAssets<T>(object key, Transform parentTran,
             Action<UnityEngine.ResourceManagement.IAsyncOperation<T>> onSingleCompleted = null,
             Action<IAsyncOperation<IList<T>>> onCompleted = null)
@@ -168,20 +178,27 @@ namespace BrickSaboteur
             var op = Addressables.LoadAssets<IResourceLocation>(key, x => list.Add(x.Result));
             return op;
         }
+#endif
         // ---------------------------------
-        public IAsyncOperation<Scene> LoadScene(string key, LoadSceneMode loadMode = LoadSceneMode.Single)
+        public IObservable<AsyncOperation> LoadScene(string key, LoadSceneMode loadMode = LoadSceneMode.Single)
         {
-            var op = Addressables.LoadScene($"Assets/_Scenes/{key}.unity", loadMode);
-            return op;
+            // var op = Addressables.LoadScene($"Assets/_Scenes/{key}.unity", loadMode);
+            var stream = SceneManager.LoadSceneAsync(key, loadMode).AsAsyncOperationObservable();
+            return stream;
         }
-        public IAsyncOperation<Scene> LoadScene(int num, LoadSceneMode loadMode = LoadSceneMode.Single)
+        public IObservable<AsyncOperation> LoadSceneByNum(int num, LoadSceneMode loadMode = LoadSceneMode.Single)
         {
-            var op = Addressables.LoadScene($"Assets/_Scenes/Scene_{num}.unity", loadMode);
-            return op;
+            var stream = SceneManager.LoadSceneAsync("Scene_" + num, loadMode).AsAsyncOperationObservable();
+            return stream;
         }
         public void ReleaseObject(UnityEngine.Object obj, float delay = 0)
         {
+#if USE_ADDRESSABLE
             Addressables.ReleaseInstance(obj, delay);
+#else
+            UnityEngine.Object.Destroy(obj, delay);
+#endif
+
         }
         public Scene CurrentScene => SceneManager.GetActiveScene();
         #endregion

@@ -12,7 +12,10 @@
 #endregion
 using System.Collections;
 using NearyFrame.Base;
+using UniRx;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+
 namespace BrickSaboteur
 {
     /// <summary>
@@ -24,12 +27,18 @@ namespace BrickSaboteur
         // [Sirenix.Serialization.OdinSerialize] 
         protected Nearyc.Utility.AsyncPool<T> pool;
         [SerializeField]
-        protected string _path => Path;
+        protected string _path => _prefabPrefix + Path;
         protected abstract string Path { get; }
+
+        [Sirenix.OdinInspector.ShowInInspector] private string _prefabPrefix => AddressablePathEx.PREFAB_PREFIX;
+        [Sirenix.OdinInspector.ShowInInspector] private string _prefabSuffix => AddressablePathEx.PREFAB_SUFFIX;
         protected override IEnumerator OnStart()
         {
             yield return BrickMgrM.WaitModule<IPoolTag>();
-            pool = BrickMgrM.PoolModule.GetOrCreate<T>(_path);
+            var aop = Resources.LoadAsync(_path);
+            yield return aop;
+
+            pool = BrickMgrM.PoolModule.GetOrCreate<T>(aop.asset as GameObject);
         }
     }
 }

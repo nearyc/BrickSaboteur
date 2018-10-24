@@ -17,11 +17,17 @@ using UnityEngine;
 
 namespace BrickSaboteur
 {
-    public interface ICameraTag : IModuleTag<ICameraTag> { }
-    public class CameraManager : ManagerBase<CameraManager, ICameraTag>
+    public interface ICameraTag : IModuleTag<ICameraTag>
     {
-        public Camera mainCam;
-        public Camera UICam;
+        Camera MainCam { get; }
+        Camera UICame { get; }
+    }
+    public class CameraManager : ManagerBase<CameraManager, ICameraTag>, ICameraTag
+    {
+        private Camera _mainCam;
+        public Camera MainCam => _mainCam;
+        private Camera _UICam;
+        public Camera UICame => _UICam;
         // public CinemachineVirtualCamera virtualCame1;
         protected override void OnDestroy()
         {
@@ -35,11 +41,9 @@ namespace BrickSaboteur
             yield return null;
             Debug.Log("Create CameraManager");
 
-            // virtualCame1 = virtualCame1.GetComponentFromChildren(this, nameof(virtualCame1));
-            mainCam = mainCam.GetComponentFromChildren(this, nameof(mainCam));
-            UICam = UICam.GetComponentFromChildren(this, nameof(UICam));
-            yield return BrickMgrM.WaitBoardInit();
-            // virtualCame1.Follow = MgrM.EntityModule.player.transform;
+            _mainCam = _mainCam.GetComponentFromChildren(this, nameof(_mainCam));
+            _UICam = _UICam.GetComponentFromChildren(this, nameof(_UICam));
+            // yield return BrickMgrM.WaitBoardInit();
         }
     }
 }

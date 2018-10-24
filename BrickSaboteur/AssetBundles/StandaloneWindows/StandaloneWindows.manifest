@@ -1,7 +1,0 @@
-ManifestFileVersion: 0
-CRC: 3298328501
-AssetBundleManifest:
-  AssetBundleInfos:
-    Info_0:
-      Name: entity.folder
-      Dependencies: {}

@@ -15,12 +15,7 @@ MonoBehaviour:
   m_data:
     m_serializedData: []
   m_guid: aa4eef24188ae67499d0e9176152b3dd
-  m_serializeEntries:
-  - m_guid: 4cbe2ed81c96fbd4a814ed2cb3ac19b6
-    m_address: Assets/_Prefabs/UI/MainUI
-    m_readOnly: 0
-    m_serializedLabels:
-    - UIMainRoot
+  m_serializeEntries: []
   m_readOnly: 0
   m_settings: {fileID: 11400000, guid: 504c9cf66fc75ea44b7dc84ead805c0b, type: 2}
   m_schemaSet:

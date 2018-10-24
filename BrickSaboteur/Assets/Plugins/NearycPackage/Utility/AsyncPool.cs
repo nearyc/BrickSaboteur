@@ -17,15 +17,13 @@ using System.Threading;
 using UniRx;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+#if USE_ADDRESSABLE
 using UnityEngine.ResourceManagement;
+#endif
 namespace Nearyc.Utility
 {
 
     public abstract class AsyncPool { }
-    // public class AsyncGOPool : AsyncPool<GameObject>
-    // {
-
-    // }
     /// <summary>
     /// Async Component Pool
     /// </summary>
@@ -35,7 +33,7 @@ namespace Nearyc.Utility
     public class AsyncPool<T> : AsyncPool, IDisposable
     where T : UnityEngine.Component
     {
-        public AsyncPool(Func<IObservable<T>> createInstanceAsync, int maxCount = 100)
+        public AsyncPool(Func<IObservable<T>> createInstanceAsync, int maxCount = 1000)
         {
             this.createInstanceAsync = createInstanceAsync;
             MaxCount = maxCount;
@@ -47,7 +45,7 @@ namespace Nearyc.Utility
             this.createInstanceAsync = createInstanceAsync??DefaultCreateInstanceAsync;
             MaxCount = maxCount;
         }
-
+#if USE_ADDRESSABLE
         /// <summary>用AssetReference方式生成</summary>
         public AsyncPool(AssetReference refer, Func<IObservable<T>> createInstanceAsync = null, int maxCount = 1000)
         {
@@ -56,6 +54,7 @@ namespace Nearyc.Utility
             this.createInstanceAsync = createInstanceAsync??DefaultCreateInstanceAsync;
             MaxCount = maxCount;
         }
+#endif
         /// <summary>用Gameobject方式生成</summary>
         public AsyncPool(GameObject prefab, Func<IObservable<T>> createInstanceAsync = null, int maxCount = 1000)
         {
@@ -71,14 +70,16 @@ namespace Nearyc.Utility
         Queue<T> q;
         public int MaxCount { get; set; }
         protected GameObject prefab;
+#if USE_ADDRESSABLE
         protected AssetReference refer;
+#endif
         protected string referPath;
         protected Func<IObservable<T>> createInstanceAsync;
 
         /// <summary>默认的生成方法</summary>
         private IObservable<T> DefaultCreateInstanceAsync()
         {
-
+#if USE_ADDRESSABLE
             //  优先使用refer
             if (refer != null)
             {
@@ -90,7 +91,8 @@ namespace Nearyc.Utility
                 return ObservableAddressables.Instantiate<GameObject>(referPath, parent).Select(x => x.GetComponent<T>());
             }
             // 后选用Gameobject
-            else if (prefab != null)
+#endif
+            if (prefab != null)
             {
                 var t = GameObject.Instantiate(prefab).GetComponent<T>();
                 t.transform.parent = parent;
@@ -143,8 +145,11 @@ namespace Nearyc.Utility
 
             var go = instance.gameObject;
             if (go == null) return;
-            // UnityEngine.Object.Destroy(go);
+#if USE_ADDRESSABLE
             Addressables.ReleaseInstance(instance);
+#else
+            UnityEngine.Object.Destroy(go);
+#endif
         }
 
         /// <summary>
@@ -191,7 +196,9 @@ namespace Nearyc.Utility
 
             if ((q.Count + 1) == MaxCount)
             {
-                throw new InvalidOperationException("Reached Max PoolSize");
+                // throw new InvalidOperationException("Reached Max PoolSize");
+                Debug.Log("Reached Max PoolSize");
+                return;
             }
 
             OnBeforeReturn(instance);

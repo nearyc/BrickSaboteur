@@ -10,6 +10,8 @@
 //===================================================
 
 #endregion
+using UnityEngine.AddressableAssets;
+
 namespace BrickSaboteur
 {
     /// <summary>
@@ -17,11 +19,13 @@ namespace BrickSaboteur
     /// </summary>
     public static class AssetPath
     {
+        public static string PrefabPrefix => AddressablePathEx.PREFAB_PREFIX;
+        public static string PrefabSuffix => AddressablePathEx.PREFAB_SUFFIX;
         #region Entity
-        public const string Slider = "Entity/Slider";
+        public const string Slider = "Entity/Slider_";
         public const string Ball = "Entity/Ball";
         public const string Bonus = "Entity/Bonus_";
-        public const string Board = "Entity/Board";
+        // public const string Slider = "Entity/Slider";
         public const string LevelBackGround = "Entity/Level_BackGround";
         #endregion
         #region Level
@@ -30,6 +34,7 @@ namespace BrickSaboteur
         #endregion
         #region UI
         public const string HealthIcon = "UI/HealthIcon";
+        public const string LevelSlotButton = "UI/LevelSlotButton";
         #endregion
     }
     /// <summary>
@@ -39,5 +44,8 @@ namespace BrickSaboteur
     {
         public const string PlusCount = "PlusCount";
         public const string MultiplyCount = "MultiplyCount";
+        public const string Level = "Level";
+        public const string Difiicuilty = "Difficuilty";
+
     }
 }

@@ -21,9 +21,10 @@ namespace Nearyc.Skill
         float basee;
         [SerializeField] float max;
         float min;
-       [Sirenix.OdinInspector.ShowInInspector] public float Current => current.Value;
-        private FloatReactiveProperty current;
-        public FloatReactiveProperty percent => new FloatReactiveProperty((float) current.Value / max);
+        [Sirenix.OdinInspector.ShowInInspector]
+        public float CurrentValue => Current.Value;
+        public FloatReactiveProperty Current { get; private set; }
+        public FloatReactiveProperty percent => new FloatReactiveProperty((float) Current.Value / max);
         List<PropertyNode<float>> adds;
         List<PropertyNode<float>> mores;
         public float Max => max;
@@ -33,23 +34,23 @@ namespace Nearyc.Skill
             this.basee = @base == -1 ? this.basee : @base;
             adds = new List<PropertyNode<float>>();
             mores = new List<PropertyNode<float>>();
-            this.current = new FloatReactiveProperty();
+            this.Current = new FloatReactiveProperty();
             this.min = min.HasValue?min.Value : 0;
 
             OnValueChanged();
-            this.current.Value = current.HasValue? current.Value : max;
+            this.Current.Value = current.HasValue? current.Value : max;
 
         }
         public void ModifyCurrent(float amount)
         {
-            current.Value += amount;
-            if (current.Value > max)
+            Current.Value += amount;
+            if (Current.Value > max)
             {
-                current.Value = max;
+                Current.Value = max;
             }
-            if (current.Value < min)
+            if (Current.Value < min)
             {
-                current.Value = min;
+                Current.Value = min;
                 if (onCurrentEnterZero != null)
                     onCurrentEnterZero();
             }
@@ -58,19 +59,19 @@ namespace Nearyc.Skill
         {
             if (max == 0) max = basee == 0 ? 1 : basee;
 
-            float percent = current.Value / max;
+            float percent = Current.Value / max;
 
             float moreSum = 0;
             mores.ForEach(x => moreSum += x.value);
             if (moreSum <= -100)
             {
-                current.Value = max = 0;
+                Current.Value = max = 0;
                 return;
             }
             float addSum = 0;
             adds.ForEach(x => addSum += x.value);
             max = (basee + addSum) * (1 + moreSum / 100);
-            current.Value = (max * percent);
+            Current.Value = (max * percent);
         }
         public void Add(PropertyNode<float> change)
         {

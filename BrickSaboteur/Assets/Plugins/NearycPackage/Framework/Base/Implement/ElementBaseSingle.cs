@@ -18,8 +18,8 @@ namespace NearyFrame.Base
     /// </summary>
     /// <typeparam name="T">Self</typeparam>
     /// <typeparam name="Tag">ITag</typeparam>
-    public abstract class ElementBaseSingle<T, Tag> : ElementBase<Tag>, ISingleton, IModuleTag<Tag>
-        where T : ElementBaseSingle<T, Tag>, ISingleton
+    public abstract class ElementBaseSingle<T, Tag> : ElementBase<Tag>, ISingleton
+    where T : ElementBaseSingle<T, Tag>, ISingleton
     where Tag : IModuleTag<Tag>
     {
         #region Singleton

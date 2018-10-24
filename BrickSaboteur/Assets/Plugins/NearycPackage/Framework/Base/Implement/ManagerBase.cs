@@ -22,7 +22,7 @@ namespace NearyFrame.Base
     /// </summary>
     /// <typeparam name="IModuleElement">Self</typeparam>
     /// <typeparam name="Tag">Tag</typeparam>
-    public abstract class ManagerBase<T, Tag> : ManagerBase, IModule<Tag>, ISingleton where T : ManagerBase<T, Tag>
+    public abstract class ManagerBase<T, Tag> : ManagerBase, IModule<Tag>, ISingleton where T : ManagerBase<T, Tag>, IModuleTag<Tag>
         where Tag : IModuleTag<Tag>
         {
             protected static bool isLoaded = true;
@@ -57,7 +57,7 @@ namespace NearyFrame.Base
 
             #endregion
             [Sirenix.OdinInspector.ShowInInspector]
-             protected Dictionary<Type, ElementBase<Tag>> _moduleElementDict;
+            protected Dictionary<Type, ElementBase<Tag>> _moduleElementDict;
             /// <summary>
             /// 创建时候，注册自己
             /// </summary>

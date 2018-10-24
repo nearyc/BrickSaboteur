@@ -15,16 +15,7 @@ MonoBehaviour:
   m_data:
     m_serializedData: []
   m_guid: 9b2751a0e820b064c844a508823d12e4
-  m_serializeEntries:
-  - m_guid: 2e212d2cd30bd404da46b57ffcd0e196
-    m_address: Assets/_Prefabs/UI/GmaeUI
-    m_readOnly: 0
-    m_serializedLabels:
-    - UIGameRoot
-  - m_guid: b390a5cb422ec4a46befa56f1dc9f14b
-    m_address: Assets/_Prefabs/UI/HealthIcon.prefab
-    m_readOnly: 0
-    m_serializedLabels: []
+  m_serializeEntries: []
   m_readOnly: 0
   m_settings: {fileID: 11400000, guid: 504c9cf66fc75ea44b7dc84ead805c0b, type: 2}
   m_schemaSet:

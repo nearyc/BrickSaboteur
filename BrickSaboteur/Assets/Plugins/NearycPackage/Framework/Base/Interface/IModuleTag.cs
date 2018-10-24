@@ -12,16 +12,21 @@
 #endregion
 using System.Collections;
 using System.Reflection;
+using NearyFrame.Base;
 using UnityEngine;
 namespace NearyFrame
 {
     public interface IModuleTag
     {
-        
+
     }
-    public interface IModuleTag<E>:IModuleTag where E : IModuleTag<E>
+    public interface IModuleTag<E> : IModuleTag where E : IModuleTag<E>
     {
-        bool InitializeCondition { get; }
+        // bool InitializeCondition { get; }
+        bool RegisterSingleton(ElementBase<E> ele);
+        void UnRegisterSingleton(ElementBase<E> ele);
+        T GetElement<T>() where T : ElementBase<E>,
+        new();
     }
 
 }
