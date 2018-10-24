@@ -67,10 +67,11 @@ namespace BrickSaboteur
             yield return new WaitForSeconds(1);
             isLoaded = true;
         }
-        //游戏开始,1和2都对应游戏scene
+        //游戏开始,1和2都对应游戏scene,通过切换销毁物体
         public void GameStart(int level, EDifficulty difficulty)
         {
             levelIndex = level;
+          
             if (sceneIndex != 1)
                 LoadSceneByNum(1).Last().Subscribe(__ =>
                 {
@@ -88,7 +89,7 @@ namespace BrickSaboteur
                 });
             }
         }
-        //游戏结束
+        //游戏结束，胜利或失败
         public void GameEnd(bool isWin)
         {
             Debug.Log("GameEnd");
@@ -183,11 +184,14 @@ namespace BrickSaboteur
         public IObservable<AsyncOperation> LoadScene(string key, LoadSceneMode loadMode = LoadSceneMode.Single)
         {
             // var op = Addressables.LoadScene($"Assets/_Scenes/{key}.unity", loadMode);
+            SceneTransition();
+            
             var stream = SceneManager.LoadSceneAsync(key, loadMode).AsAsyncOperationObservable();
             return stream;
         }
         public IObservable<AsyncOperation> LoadSceneByNum(int num, LoadSceneMode loadMode = LoadSceneMode.Single)
         {
+            SceneTransition();
             var stream = SceneManager.LoadSceneAsync("Scene_" + num, loadMode).AsAsyncOperationObservable();
             return stream;
         }
@@ -199,6 +203,14 @@ namespace BrickSaboteur
             UnityEngine.Object.Destroy(obj, delay);
 #endif
 
+        }
+        private void SceneTransition(){
+              this.InstantiatePrefabByPath<GameObject>(AssetPath.Black)
+            .Do(x=>x.transform.parent=Mgr.Instance.gameObject.transform)
+            .Delay(System.TimeSpan.FromMilliseconds(150))
+            .Subscribe(x=>{
+                this.ReleaseObject(x);
+            });
         }
         public Scene CurrentScene => SceneManager.GetActiveScene();
         #endregion

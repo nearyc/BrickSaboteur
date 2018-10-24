@@ -35,6 +35,7 @@ namespace BrickSaboteur
         #region UI
         public const string HealthIcon = "UI/HealthIcon";
         public const string LevelSlotButton = "UI/LevelSlotButton";
+        public const string Black="UI/Black";
         #endregion
     }
     /// <summary>

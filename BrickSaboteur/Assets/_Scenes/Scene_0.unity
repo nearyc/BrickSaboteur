@@ -354,6 +354,111 @@ MonoBehaviour:
   mainHudCanvas: {fileID: 0}
   gamedHudCanvas: {fileID: 0}
   isGameHudInited: 0
+--- !u!1001 &520510772
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 224182238523320632, guid: c692418e2ed092943bb8c6c69ec630e8,
+        type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224182238523320632, guid: c692418e2ed092943bb8c6c69ec630e8,
+        type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224182238523320632, guid: c692418e2ed092943bb8c6c69ec630e8,
+        type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224182238523320632, guid: c692418e2ed092943bb8c6c69ec630e8,
+        type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224182238523320632, guid: c692418e2ed092943bb8c6c69ec630e8,
+        type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224182238523320632, guid: c692418e2ed092943bb8c6c69ec630e8,
+        type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224182238523320632, guid: c692418e2ed092943bb8c6c69ec630e8,
+        type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224182238523320632, guid: c692418e2ed092943bb8c6c69ec630e8,
+        type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224182238523320632, guid: c692418e2ed092943bb8c6c69ec630e8,
+        type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224182238523320632, guid: c692418e2ed092943bb8c6c69ec630e8,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224182238523320632, guid: c692418e2ed092943bb8c6c69ec630e8,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224182238523320632, guid: c692418e2ed092943bb8c6c69ec630e8,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224182238523320632, guid: c692418e2ed092943bb8c6c69ec630e8,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224182238523320632, guid: c692418e2ed092943bb8c6c69ec630e8,
+        type: 2}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224182238523320632, guid: c692418e2ed092943bb8c6c69ec630e8,
+        type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224182238523320632, guid: c692418e2ed092943bb8c6c69ec630e8,
+        type: 2}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224182238523320632, guid: c692418e2ed092943bb8c6c69ec630e8,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224182238523320632, guid: c692418e2ed092943bb8c6c69ec630e8,
+        type: 2}
+      propertyPath: m_Pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224182238523320632, guid: c692418e2ed092943bb8c6c69ec630e8,
+        type: 2}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c692418e2ed092943bb8c6c69ec630e8, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1 &691754187
 GameObject:
   m_ObjectHideFlags: 0
@@ -408,6 +513,7 @@ MonoBehaviour:
     min: 0
   Difficulty: 0
   Level: 0
+  isInGameState: 0
 --- !u!1001 &729303698
 Prefab:
   m_ObjectHideFlags: 0
