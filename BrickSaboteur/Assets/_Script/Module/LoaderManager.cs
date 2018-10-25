@@ -19,6 +19,7 @@ using NearyFrame.Base;
 using UniRx;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using DG.Tweening;
 #if USE_ADDRESSABLE
 using UnityEngine.ResourceManagement;
 #endif
@@ -107,8 +108,46 @@ namespace BrickSaboteur
                 MessageBroker.Default.Publish(new GameTag_BackToMenu());
             });
         }
+         private void SceneTransition()
+        {
+            this.InstantiatePrefabByPath<GameObject>(AssetPath.Black)
+                .Do(x => x.transform.parent = BrickMgrM.UIModule.popUpHudCanvas.transform)
+                .Select(x=>x.GetComponent<UnityEngine.UI.Image>())
+                .Do(x=>x.DOFade(0,1f))
+                .Delay(System.TimeSpan.FromMilliseconds(1000))
+                .Subscribe(x =>
+                {
+                    this.ReleaseObject(x.gameObject);
+                });
+        }
         #region Addressable
         // ---------------------------------
+          // ---------------------------------
+        public IObservable<AsyncOperation> LoadScene(string key, LoadSceneMode loadMode = LoadSceneMode.Single)
+        {
+            // var op = Addressables.LoadScene($"Assets/_Scenes/{key}.unity", loadMode);
+            SceneTransition();
+
+            var stream = SceneManager.LoadSceneAsync(key, loadMode).AsAsyncOperationObservable();
+            return stream;
+        }
+        public IObservable<AsyncOperation> LoadSceneByNum(int num, LoadSceneMode loadMode = LoadSceneMode.Single)
+        {
+            SceneTransition();
+            var stream = SceneManager.LoadSceneAsync("Scene_" + num, loadMode).AsAsyncOperationObservable();
+            return stream;
+        }
+        public void ReleaseObject(UnityEngine.Object obj, float delay = 0)
+        {
+#if USE_ADDRESSABLE
+            Addressables.ReleaseInstance(obj, delay);
+#else
+            UnityEngine.Object.Destroy(obj, delay);
+#endif
+
+        }
+       
+        public Scene CurrentScene => SceneManager.GetActiveScene();
 #if USE_ADDRESSABLE
         public System.IObservable<IList<T>> InstantiateAll<T>(object key, Transform parentTran,
             Action<UnityEngine.ResourceManagement.IAsyncOperation<T>> onSingleCompleted = null,
@@ -181,41 +220,7 @@ namespace BrickSaboteur
             return op;
         }
 #endif
-        // ---------------------------------
-        public IObservable<AsyncOperation> LoadScene(string key, LoadSceneMode loadMode = LoadSceneMode.Single)
-        {
-            // var op = Addressables.LoadScene($"Assets/_Scenes/{key}.unity", loadMode);
-            SceneTransition();
-
-            var stream = SceneManager.LoadSceneAsync(key, loadMode).AsAsyncOperationObservable();
-            return stream;
-        }
-        public IObservable<AsyncOperation> LoadSceneByNum(int num, LoadSceneMode loadMode = LoadSceneMode.Single)
-        {
-            SceneTransition();
-            var stream = SceneManager.LoadSceneAsync("Scene_" + num, loadMode).AsAsyncOperationObservable();
-            return stream;
-        }
-        public void ReleaseObject(UnityEngine.Object obj, float delay = 0)
-        {
-#if USE_ADDRESSABLE
-            Addressables.ReleaseInstance(obj, delay);
-#else
-            UnityEngine.Object.Destroy(obj, delay);
-#endif
-
-        }
-        private void SceneTransition()
-        {
-            this.InstantiatePrefabByPath<GameObject>(AssetPath.Black)
-                .Do(x => x.transform.parent = Mgr.Instance.gameObject.transform)
-                .Delay(System.TimeSpan.FromMilliseconds(150))
-                .Subscribe(x =>
-                {
-                    this.ReleaseObject(x);
-                });
-        }
-        public Scene CurrentScene => SceneManager.GetActiveScene();
+      
         #endregion
     }
 }

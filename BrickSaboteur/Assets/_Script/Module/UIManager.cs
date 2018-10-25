@@ -19,7 +19,11 @@ using UnityEngine.AddressableAssets;
 namespace BrickSaboteur
 {
 
-    public interface IUITag : IModuleTag<IUITag> { }
+    public interface IUITag : IModuleTag<IUITag> {
+          Canvas mainHudCanvas{get;}
+         Canvas gamedHudCanvas{get;}
+         Canvas popUpHudCanvas{get;}
+     }
 
     //UI模块管理实现
     /// <summary>
@@ -28,9 +32,9 @@ namespace BrickSaboteur
     /// <typeparam name="IUITag"></typeparam>
     public class UIManager : ManagerBase<UIManager, IUITag>, IUITag
     {
-        public Canvas mainHudCanvas;
-        public Canvas gamedHudCanvas;
-        public Canvas popUpHudCanvas;
+        public Canvas mainHudCanvas{get;private set;}
+        public Canvas gamedHudCanvas{get;private set;}
+        public Canvas popUpHudCanvas{get;private set;}
         [SerializeField] bool isGameHudInited = false;
         protected override void OnDestroy()
         {

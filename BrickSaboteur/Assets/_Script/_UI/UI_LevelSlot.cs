@@ -60,13 +60,13 @@ namespace BrickSaboteur
             {
                 button.interactable = true;
                 this.image.color = new Color32(80, 140, 90, 255);
-                image.DOColor(new Color32(0, 0, 0, 255), 1).From();
+                // image.DOColor(new Color32(0, 0, 0, 255), 1).From();
             }
             else
             {
                 button.interactable = false;
                 this.image.color = new Color32(90, 90, 90, 255);
-                image.DOColor(new Color32(255, 255, 255, 255), 1).From();
+                // image.DOColor(new Color32(255, 255, 255, 255), 1).From();
             }
         }
 
