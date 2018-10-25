@@ -58,6 +58,7 @@ namespace BrickSaboteur
         }
         protected override System.Collections.IEnumerator OnInitializeRegisterSelf()
         {
+            // Screen.SetResolution(1366, 768, true);
             isLoaded = false;
             Mgr.Instance.RegisterModule(this);
             Debug.Log("Create LoaderManager");
@@ -71,7 +72,7 @@ namespace BrickSaboteur
         public void GameStart(int level, EDifficulty difficulty)
         {
             levelIndex = level;
-          
+
             if (sceneIndex != 1)
                 LoadSceneByNum(1).Last().Subscribe(__ =>
                 {
@@ -185,7 +186,7 @@ namespace BrickSaboteur
         {
             // var op = Addressables.LoadScene($"Assets/_Scenes/{key}.unity", loadMode);
             SceneTransition();
-            
+
             var stream = SceneManager.LoadSceneAsync(key, loadMode).AsAsyncOperationObservable();
             return stream;
         }
@@ -204,13 +205,15 @@ namespace BrickSaboteur
 #endif
 
         }
-        private void SceneTransition(){
-              this.InstantiatePrefabByPath<GameObject>(AssetPath.Black)
-            .Do(x=>x.transform.parent=Mgr.Instance.gameObject.transform)
-            .Delay(System.TimeSpan.FromMilliseconds(150))
-            .Subscribe(x=>{
-                this.ReleaseObject(x);
-            });
+        private void SceneTransition()
+        {
+            this.InstantiatePrefabByPath<GameObject>(AssetPath.Black)
+                .Do(x => x.transform.parent = Mgr.Instance.gameObject.transform)
+                .Delay(System.TimeSpan.FromMilliseconds(150))
+                .Subscribe(x =>
+                {
+                    this.ReleaseObject(x);
+                });
         }
         public Scene CurrentScene => SceneManager.GetActiveScene();
         #endregion

@@ -30,6 +30,7 @@ namespace BrickSaboteur
     {
         public Canvas mainHudCanvas;
         public Canvas gamedHudCanvas;
+        public Canvas popUpHudCanvas;
         [SerializeField] bool isGameHudInited = false;
         protected override void OnDestroy()
         {
@@ -55,6 +56,9 @@ namespace BrickSaboteur
             MessageBroker.Default.Receive<GameTag_GameEnd>().Subscribe(x => GameEnd(x.isWinorNot)).AddTo(this);;
             //回到主菜单,清理InGameUI
             MessageBroker.Default.Receive<GameTag_BackToMenu>().Subscribe(__ => BackToMenu()).AddTo(this);;
+            //生成弹窗
+            popUpHudCanvas = popUpHudCanvas.GetComponentFromChildren(this, nameof(popUpHudCanvas));
+            popUpHudCanvas.worldCamera = BrickMgrM.CameraManager.MainCam;
         }
         private void LoadGameUI()
         {

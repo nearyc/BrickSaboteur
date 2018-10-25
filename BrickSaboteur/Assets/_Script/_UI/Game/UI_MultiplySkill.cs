@@ -12,6 +12,7 @@
 #endregion
 using System.Collections;
 using NearyFrame.Base;
+using TMPro;
 using UniRx;
 using Unity.Linq;
 using UnityEngine;
@@ -23,11 +24,12 @@ namespace BrickSaboteur
     /// </summary>
     /// <typeparam name="UI_MultiplySkill"></typeparam>
     /// <typeparam name="IUITag"></typeparam>
-    public class UI_MultiplySkill : UIELement<UI_MultiplySkill>
+    public class UI_MultiplySkill : UIELementBase<UI_MultiplySkill>
     {
-        [SerializeField] Text countText;
-        [SerializeField] Button skillButton;
-        [SerializeField] SkillHolder skillHolder;
+        // [SerializeField] Text countText;
+        [SerializeField] TextMeshProUGUI _textMeshProText;
+        [SerializeField] Button _skillButton;
+        [SerializeField] SkillHolder _skillHolder;
         protected override void OnDestroy()
         {
             this.UnRegisterSelf(this);
@@ -37,19 +39,19 @@ namespace BrickSaboteur
             yield return null;
             this.RegisterSelf(this);
 
-            countText = countText.GetComponentFromDescendants(this, nameof(countText));
-            skillButton = skillButton.GetComponentFromChildren(this, nameof(skillButton));
+            _textMeshProText = _textMeshProText.GetComponentFromDescendants(this, nameof(_textMeshProText));
+            _skillButton = _skillButton.GetComponentFromChildren(this, nameof(_skillButton));
             yield return BrickMgrM.WaitModule<IPropertyTag>();
             yield return new WaitForSeconds(0.1f);
-            skillHolder = BrickMgrM.PropertyModule.GetElement<SkillHolder>();
+            _skillHolder = BrickMgrM.PropertyModule.GetElement<SkillHolder>();
             //按下按键尝试释放
-            skillButton.OnClickAsObservable().Subscribe(__ =>
+            _skillButton.OnClickAsObservable().Subscribe(__ =>
             {
                 MessageBroker.Default.Publish(new SkillTag_TryModifySkill());
                 MessageBroker.Default.Publish(new PropTag_ModifyMultiplyCount { value = -1 });
             }).AddTo(this);
             //更新数字
-            BrickMgrM.PropertyModule.multiplyCount.current.SubscribeToText(countText).AddTo(this);
+            BrickMgrM.PropertyModule.multiplyCount.current.SubscribeWithState(_textMeshProText, (x, t) => t.text = x.ToString()).AddTo(this);
         }
     }
 }

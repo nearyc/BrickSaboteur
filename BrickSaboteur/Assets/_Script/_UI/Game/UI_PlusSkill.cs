@@ -23,9 +23,9 @@ namespace BrickSaboteur
     /// </summary>
     /// <typeparam name="UI_PlusSkill"></typeparam>
     /// <typeparam name="IUITag"></typeparam>
-    public class UI_PlusSkill : UIELement<UI_PlusSkill>
+    public class UI_PlusSkill : UIELementBase<UI_PlusSkill>
     {
-        [SerializeField] Text countText;
+        [SerializeField] TMPro.TextMeshProUGUI _textMeshProText;
         [SerializeField] Button skillButton;
         [SerializeField] SkillHolder skillHolder;
         protected override void OnDestroy()
@@ -37,7 +37,7 @@ namespace BrickSaboteur
             yield return null;
             this.RegisterSelf(this);
 
-            countText = countText.GetComponentFromDescendants(this, nameof(countText));
+            _textMeshProText = _textMeshProText.GetComponentFromDescendants(this, nameof(_textMeshProText));
             skillButton = skillButton.GetComponentFromChildren(this, nameof(skillButton));
             yield return BrickMgrM.WaitModule<IPropertyTag>();
             yield return new WaitForSeconds(0.1f);
@@ -51,7 +51,7 @@ namespace BrickSaboteur
             }).AddTo(this);
             // ---------------------- 
             //更新数字
-            BrickMgrM.PropertyModule.plusCount.current.SubscribeToText(countText).AddTo(this);
+            BrickMgrM.PropertyModule.plusCount.current.SubscribeWithState(_textMeshProText, (x, t) => t.text = x.ToString()).AddTo(this);
         }
     }
 }

@@ -16,9 +16,15 @@ using NearyFrame.Base;
 using UnityEngine;
 namespace BrickSaboteur
 {
-    public interface IAudioTag : IModuleTag<IAudioTag> { }
+    public interface IAudioTag : IModuleTag<IAudioTag>
+    {
+
+        void SetAudioSize(int percent);
+        void IsPlayAudio(bool isPlayAudio);
+    }
     public class AudioManager : ManagerBase<AudioManager, IAudioTag>, IAudioTag
     {
+
         protected override void OnDestroy()
         {
             Mgr.Instance.UnRegisterModule(this);
@@ -30,6 +36,15 @@ namespace BrickSaboteur
             Mgr.Instance.RegisterModule(this);
             Debug.Log("Create AudioManager");
             yield return null;
+        }
+        public void SetAudioSize(int percent)
+        {
+            percent = Mathf.Clamp(percent, 0, 100);
+        }
+
+        public void IsPlayAudio(bool isPlayAudio)
+        {
+            // throw new System.NotImplementedException();
         }
     }
 }

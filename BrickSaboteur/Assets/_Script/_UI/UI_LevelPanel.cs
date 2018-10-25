@@ -13,15 +13,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using NearyFrame.Base;
 using UniRx;
 using Unity.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 namespace BrickSaboteur
 {
-
-    public class UI_LevelPanel : UIELement<UI_LevelPanel>
+    public class UI_LevelPanel : UIELementBase<UI_LevelPanel>
     {
+        [SerializeField] private Button _backButton;
+        // ---------------------- 
         [SerializeField] Sprite _lockIcon;
         [SerializeField] Sprite _unLockIcon;
         [SerializeField] private Transform _content;
@@ -32,13 +35,30 @@ namespace BrickSaboteur
         {
             this.UnRegisterSelf(this);
         }
+        public override void Show()
+        {
+            base.Show();
+            this.transform.DOLocalMoveX(0, 0.5f).SetEase(Ease.InExpo);
+        }
+        public override void Hide()
+        {
+            base.Hide();
+            this.transform.DOLocalMoveX(1000, 0.5f).SetEase(Ease.InExpo);
+        }
         protected override IEnumerator AfterStart()
         {
             this.RegisterSelf(this);
             yield return BrickMgrM.WaitModule<IPoolTag>();
             slotsList = new List<UI_LevelSlot>();
-            _content = gameObject.Descendants().Where(x => x.name == "Content").First().transform;
 
+            _content = gameObject.Descendants().Where(x => x.name == "Content").First().transform;
+            _backButton = _backButton.GetComponentFromChildren(this, nameof(_backButton));
+            _backButton.OnClickAsObservable().TakeUntilDestroy(this).Subscribe(__ =>
+            {
+                this.Hide();
+                BrickMgrM.UIModule.GetElement<UI_MainMenu>().Show();
+            });
+            // ---------------------- 
             string path = AssetPath.PrefabPrefix + AssetPath.LevelSlotButton;
             var aop = Resources.LoadAsync(path);
             Debug.Log(path);
@@ -46,7 +66,7 @@ namespace BrickSaboteur
             // ---------------------- 
             //创建物品池
             pool = BrickMgrM.PoolModule.GetOrCreate<UI_LevelSlot>(aop.asset as GameObject);
-            pool.setInActiveWhenReturn = false;
+            // pool.setInActiveWhenReturn = false;
             pool.parent = _content;
             pool.onBeforeRent += x =>
             {
@@ -56,14 +76,18 @@ namespace BrickSaboteur
             };
             pool.onBeforeReturn += x =>
             {
-                x.transform.parent = _content = this.transform;
+                x.transform.parent = _content;
             };
-            pool.PreloadAsync(100, 10);
-            yield return new WaitForSeconds(3);
+            pool.PreloadAsync(100, 10).Subscribe();
+            // yield return new WaitForSeconds(3);
             //TEST
-            ShowLevelSlots(100, 10, EDifficulty.Eazy);
-            yield return new WaitForSeconds(3);
-            ClearLevelSlot();
+            // ShowLevelSlots(100, 10, EDifficulty.Eazy);
+            // yield return new WaitForSeconds(3);
+            // ClearLevelSlot();
+        }
+        public void ShowLevelSlots(EDifficulty difficulty)
+        {
+            ShowLevelSlots(100, 12, difficulty);
         }
         /// <summary>
         /// 加载level slot
@@ -73,36 +97,40 @@ namespace BrickSaboteur
         /// <param name="difficulty"></param>
         private void ShowLevelSlots(int count, int level, EDifficulty difficulty)
         {
-            for (int i = 1; i <= count; i++)
-            {
-                if (i < level)
+            ClearLevelSlot();
+            if (showLevelStream != null) showLevelStream.Dispose();
+            showLevelStream = Observable.Interval(System.TimeSpan.FromMilliseconds(10))
+                .Take(count)
+                .Delay(System.TimeSpan.FromMilliseconds(250))
+                .Subscribe(levelCount =>
                 {
-                    pool.RentAsync().Subscribe(x =>
+                    if (levelCount < level)
                     {
-                        x.Init(_unLockIcon, i, difficulty);
-                        slotsList.Add(x);
-                    });
-                }
-                else
-                {
-                    pool.RentAsync().Subscribe(x =>
+                        pool.RentAsync().Subscribe(x =>
+                        {
+                            x.Init(true, (int) levelCount, difficulty);
+                            slotsList.Add(x);
+                        });
+                    }
+                    else
                     {
-                        x.Init(_lockIcon, i, difficulty);
-                        slotsList.Add(x);
-                    });
-                }
-            }
+                        pool.RentAsync().Subscribe(x =>
+                        {
+                            x.Init(false, (int) levelCount, difficulty);
+                            slotsList.Add(x);
+                        });
+                    }
+                }).AddTo(this);
         }
+        private System.IDisposable showLevelStream;
+
         private void ClearLevelSlot()
         {
-            // for (int i = slotsList.Count; i > 0; i++)
-            // {
-            //     pool.Return(slotsList[i - 1]);
-            // }
             foreach (var item in slotsList)
             {
                 pool.Return(item);
             }
+            slotsList.Clear();
         }
     }
 }

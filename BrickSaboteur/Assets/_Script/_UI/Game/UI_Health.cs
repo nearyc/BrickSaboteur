@@ -21,7 +21,7 @@ namespace BrickSaboteur
     /// </summary>
     /// <typeparam name="UI_Health"></typeparam>
     /// <typeparam name="IUITag"></typeparam>
-    public class UI_Health : UIELement<UI_Health>
+    public class UI_Health : UIELementBase<UI_Health>
     {
         protected override void OnDestroy()
         {

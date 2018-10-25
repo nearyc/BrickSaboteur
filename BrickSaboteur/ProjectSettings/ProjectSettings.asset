@@ -8,7 +8,7 @@ PlayerSettings:
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
-  defaultScreenOrientation: 4
+  defaultScreenOrientation: 0
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
@@ -261,7 +261,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: d5db7eb3c6c319b449ec6bdb21207389, type: 3}
+      m_Icon: {fileID: 2800000, guid: 53490fe625fe7fb4fa0a08b9c9a88b5b, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0

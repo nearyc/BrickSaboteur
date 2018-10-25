@@ -23,9 +23,9 @@ namespace BrickSaboteur
     /// </summary>
     /// <typeparam name="UI_InputArea"></typeparam>
     /// <typeparam name="IUITag"></typeparam>
-    public class UI_InputArea : UIELement<UI_InputArea>
+    public class UI_InputArea : UIELementBase<UI_InputArea>
     {
-        [SerializeField] private float deltaVertical;
+        [SerializeField] private float _deltaVertical;
         [SerializeField] Camera _camera;
         [SerializeField][Range(1, 3)] float _modifier;
         [SerializeField] private bool _firstTap = false;
@@ -67,8 +67,8 @@ namespace BrickSaboteur
                 {
                     // if (BrickMgrM.LoaderManager.isInGameState == false) BrickMgrM.LoaderManager.isInGameState = true;
                     worldX = _camera.ScreenToWorldPoint(data.position).x * _modifier;
-                    deltaVertical = last == null?0: (worldX - last.Value);
-                    temp.x = deltaVertical;
+                    _deltaVertical = last == null?0: (worldX - last.Value);
+                    temp.x = _deltaVertical;
                     BrickMgrM.EntityModule.SlidersList.ForEach(x => x.transform.position += temp);
                     last = worldX;
                 });
@@ -79,7 +79,7 @@ namespace BrickSaboteur
                 .Subscribe(data =>
                 {
                     last = null;
-                    deltaVertical = 0;
+                    _deltaVertical = 0;
                 });
         }
 

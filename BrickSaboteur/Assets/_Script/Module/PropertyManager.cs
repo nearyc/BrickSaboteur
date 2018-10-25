@@ -52,8 +52,8 @@ namespace BrickSaboteur
             yield return BrickMgrM.WaitModule<ILoaderTag>();
 
             //初始化数据
-            plusCount.Init(100, PlayerPrefs.GetInt(PlayerPrefKey.PlusCount, 5));
-            multiplyCount.Init(100, PlayerPrefs.GetInt(PlayerPrefKey.MultiplyCount, 5));
+            plusCount.Init(100, PlayerPrefs.GetInt(PlayerPrefKey.PlusCount, 999));
+            multiplyCount.Init(100, PlayerPrefs.GetInt(PlayerPrefKey.MultiplyCount, 999));
             // HealthCount.Init(3);
             //
             Difficulty = (EDifficulty) PlayerPrefs.GetInt(PlayerPrefKey.Difiicuilty, 1);
