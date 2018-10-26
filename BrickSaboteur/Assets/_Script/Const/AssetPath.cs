@@ -29,13 +29,13 @@ namespace BrickSaboteur
         public const string LevelBackGround = "Entity/Level_BackGround";
         #endregion
         #region Level
-        public const string EasyLevel = "Level/Level_1_";
-        public const string HardLevel = "Level/Level_2_";
+        public const string EasyLevel = "Level/Eazy/Level_1_";
+        public const string HardLevel = "Level/Hard/Level_2_";
         #endregion
         #region UI
         public const string HealthIcon = "UI/HealthIcon";
         public const string LevelSlotButton = "UI/LevelSlotButton";
-        public const string Black="UI/Black";
+        public const string Black = "UI/Black";
         #endregion
     }
     /// <summary>
