@@ -79,15 +79,15 @@ namespace BrickSaboteur
                 x.transform.parent = _content;
             };
             pool.PreloadAsync(100, 10).Subscribe();
-            // yield return new WaitForSeconds(3);
-            //TEST
-            // ShowLevelSlots(100, 10, EDifficulty.Eazy);
-            // yield return new WaitForSeconds(3);
-            // ClearLevelSlot();
+            PreloadLevelSlot(100, 1, EDifficulty.Eazy);
+            // ---------------------- 
         }
         public void ShowLevelSlots(EDifficulty difficulty)
         {
-            ShowLevelSlots(100, 12, difficulty);
+            if (difficulty == EDifficulty.Eazy)
+                ShowLevelSlotsCore(100, 11, difficulty);
+            else
+                ShowLevelSlotsCore(100, 5, difficulty);
         }
         /// <summary>
         /// 加载level slot
@@ -95,9 +95,9 @@ namespace BrickSaboteur
         /// <param name="count">图标，解锁或未解锁</param>
         /// <param name="level"></param>
         /// <param name="difficulty"></param>
-        private void ShowLevelSlots(int count, int level, EDifficulty difficulty)
+        private void PreloadLevelSlot(int count, int level, EDifficulty difficulty)
         {
-            ClearLevelSlot();
+            // ClearLevelSlot();
             if (showLevelStream != null) showLevelStream.Dispose();
             showLevelStream = Observable.Interval(System.TimeSpan.FromMilliseconds(10))
                 .Take(count)
@@ -121,6 +121,20 @@ namespace BrickSaboteur
                         });
                     }
                 }).AddTo(this);
+        }
+        private void ShowLevelSlotsCore(int count, int level, EDifficulty difficulty)
+        {
+            for (int i = 1; i <= 100; i++)
+            {
+                if (i < level)
+                {
+                    slotsList[i - 1].Init(true, (int) i, difficulty);
+                }
+                else
+                {
+                    slotsList[i - 1].Init(false, (int) i, difficulty);
+                }
+            }
         }
         private System.IDisposable showLevelStream;
 

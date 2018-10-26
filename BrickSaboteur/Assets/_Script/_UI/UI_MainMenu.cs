@@ -112,11 +112,11 @@ namespace BrickSaboteur
         }
         private void OnLadder()
         {
-            BrickMgrM.UIModule.GetElement<UI_PopUpPanel>().Show();
+            // BrickMgrM.UIModule.GetElement<UI_PopUpPanel>().Show();
         }
         private void OnShop()
         {
-            BrickMgrM.UIModule.GetElement<UI_PopUpPanel>().Hide();
+            // BrickMgrM.UIModule.GetElement<UI_PopUpPanel>().Hide();
         }
         private void OnMusic(bool isOn)
         {

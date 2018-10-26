@@ -19,11 +19,12 @@ using UnityEngine.AddressableAssets;
 namespace BrickSaboteur
 {
 
-    public interface IUITag : IModuleTag<IUITag> {
-          Canvas mainHudCanvas{get;}
-         Canvas gamedHudCanvas{get;}
-         Canvas popUpHudCanvas{get;}
-     }
+    public interface IUITag : IModuleTag<IUITag>
+    {
+        Canvas mainHudCanvas { get; }
+        Canvas gamedHudCanvas { get; }
+        Canvas constHudCanvas { get; }
+    }
 
     //UI模块管理实现
     /// <summary>
@@ -32,9 +33,15 @@ namespace BrickSaboteur
     /// <typeparam name="IUITag"></typeparam>
     public class UIManager : ManagerBase<UIManager, IUITag>, IUITag
     {
-        public Canvas mainHudCanvas{get;private set;}
-        public Canvas gamedHudCanvas{get;private set;}
-        public Canvas popUpHudCanvas{get;private set;}
+        [Sirenix.OdinInspector.ShowInInspector]
+        public Canvas mainHudCanvas { get; private set; }
+
+        [Sirenix.OdinInspector.ShowInInspector]
+        public Canvas gamedHudCanvas { get; private set; }
+
+        [Sirenix.OdinInspector.ShowInInspector]
+        public Canvas constHudCanvas { get; private set; }
+
         [SerializeField] bool isGameHudInited = false;
         protected override void OnDestroy()
         {
@@ -45,7 +52,6 @@ namespace BrickSaboteur
         {
             Mgr.Instance.RegisterModule(this);
             Debug.Log("Create UIManager");
-            yield return BrickMgrM.WaitModule<ICameraTag>();
 
             // mainHudCanvas = mainHudCanvas.GetComponentFromChildren(this, nameof(mainHudCanvas));
             // mainHudCanvas.worldCamera = BrickMgrM.CameraManager.mainCam;
@@ -60,9 +66,11 @@ namespace BrickSaboteur
             MessageBroker.Default.Receive<GameTag_GameEnd>().Subscribe(x => GameEnd(x.isWinorNot)).AddTo(this);;
             //回到主菜单,清理InGameUI
             MessageBroker.Default.Receive<GameTag_BackToMenu>().Subscribe(__ => BackToMenu()).AddTo(this);;
+
+            yield return BrickMgrM.WaitModule<ICameraTag>();
             //生成弹窗
-            popUpHudCanvas = popUpHudCanvas.GetComponentFromChildren(this, nameof(popUpHudCanvas));
-            popUpHudCanvas.worldCamera = BrickMgrM.CameraManager.MainCam;
+            constHudCanvas = constHudCanvas.GetComponentFromChildren(this, nameof(constHudCanvas));
+            constHudCanvas.worldCamera = BrickMgrM.CameraManager.MainCam;
         }
         private void LoadGameUI()
         {
@@ -78,6 +86,7 @@ namespace BrickSaboteur
                 {
                     gamedHudCanvas = x.GetComponent<Canvas>();
                     gamedHudCanvas.worldCamera = BrickMgrM.CameraManager.MainCam;
+                    constHudCanvas.worldCamera = BrickMgrM.CameraManager.MainCam;
                 });
         }
         private void GameEnd(bool isWInOrNot)
@@ -103,6 +112,7 @@ namespace BrickSaboteur
                 {
                     mainHudCanvas = x.GetComponent<Canvas>();
                     mainHudCanvas.worldCamera = BrickMgrM.CameraManager.MainCam;
+                    constHudCanvas.worldCamera = BrickMgrM.CameraManager.MainCam;
                 });
         }
     }

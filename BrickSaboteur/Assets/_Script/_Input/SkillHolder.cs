@@ -77,6 +77,10 @@ namespace BrickSaboteur
         {
             for (int i = 0; i < 3; i++)
             {
+                if (BrickMgrM.EntityModule.BallsSet.Count > 500)
+                {
+                    return;
+                }
                 BrickMgrM.PoolModule.GetPool<BallEntity>()
                     .RentAsync()
                     .Subscribe(x =>
@@ -109,26 +113,30 @@ namespace BrickSaboteur
                 tempList.Add(item);
             }
             yield return null;
-            foreach (var item in tempList)
+            foreach (var ball in tempList)
             {
-                if (item.gameObject.activeInHierarchy == true)
+                if (BrickMgrM.EntityModule.BallsSet.Count > 500)
+                {
+                    yield break;
+                }
+                if (ball.gameObject.activeInHierarchy == true)
                 {
                     var zFloat = Random.Range(-80, 45);
-                    item.Init(item.transform.position, new Vector3(0, 0, zFloat));
+                    ball.Init(ball.transform.position, new Vector3(0, 0, zFloat));
 
                     BrickMgrM.PoolModule.GetPool<BallEntity>()
                         .RentAsync()
                         .Subscribe(x =>
                         {
                             zFloat = Random.Range(-45, 80);
-                            x.Init(item.transform.position, new Vector3(0, 0, zFloat));
+                            x.Init(ball.transform.position, new Vector3(0, 0, zFloat));
                         });
                     BrickMgrM.PoolModule.GetPool<BallEntity>()
                         .RentAsync()
                         .Subscribe(x =>
                         {
                             zFloat = Random.Range(110, 340);
-                            x.Init(item.transform.position, new Vector3(0, 0, zFloat));
+                            x.Init(ball.transform.position, new Vector3(0, 0, zFloat));
                         });
                     counter++;
                 }

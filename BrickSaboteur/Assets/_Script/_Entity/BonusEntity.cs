@@ -34,7 +34,7 @@ namespace BrickSaboteur
     {
         [SerializeField] EBonusTag type;
         // [SerializeField] SkillHolder skillHolder;
-        [SerializeField][Range(2, 5)] float _speed = 2;
+        [SerializeField][Range(2, 5)] float _speed = 4;
         Rigidbody2D _rb;
         protected override IEnumerator OnStart()
         {

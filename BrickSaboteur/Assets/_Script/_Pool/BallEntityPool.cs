@@ -11,9 +11,11 @@
 
 #endregion
 using System.Collections;
+using NearyFrame.Base;
 using UniRx;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Tilemaps;
 namespace BrickSaboteur
 {
     /// <summary>
@@ -22,6 +24,7 @@ namespace BrickSaboteur
     /// <typeparam name="BallEntity"></typeparam>
     public class BallEntityPool : AsyncPoolHolder<BallEntity>
     {
+        // [SerializeField] public Tilemap levelTile;
         protected override string Path => AssetPath.Ball;
         [SerializeField] Transform parent;
 
@@ -31,7 +34,8 @@ namespace BrickSaboteur
             pool.parent = this.transform;
             pool.onBeforeRent += x =>
             {
-
+                // var temp = BrickMgrM.GridManager.LevelTile;
+                // x.transform.localScale = levelTile != null?levelTile.transform.localScale : Vector3.one;
             };
             pool.onBeforeReturn += x =>
             {
@@ -39,8 +43,9 @@ namespace BrickSaboteur
                     x.rb = x.GetComponent<Rigidbody2D>();
                 x.rb.velocity = Vector3.zero;
             };
-            pool.MaxCount = 1000;
-            pool.PreloadAsync(300, 10).Subscribe();
+            pool.MaxCount = 500;
+            pool.PreloadAsync(100, 10).Subscribe();
+            // pool.
         }
     }
 }

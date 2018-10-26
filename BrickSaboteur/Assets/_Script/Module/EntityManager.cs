@@ -95,7 +95,7 @@ namespace BrickSaboteur
                 var path = AssetPath.Slider + BrickMgrM.PropertyModule.SliderSize.CurrentValue;
                 Debug.Log(path);
 
-                var pos = new Vector3(0, -9, 0);
+                var pos = new Vector3(0, -16, 0);
                 if (SlidersList.Count > 0)
                 {
                     pos = SlidersList[0].transform.localPosition;
@@ -128,7 +128,7 @@ namespace BrickSaboteur
                         }
                         else
                         {
-                            x.Init(new Vector3(0, -9, 0) + Vector3.up * 0.5f, Vector3.zero, 0);
+                            x.Init(new Vector3(0, -16, 0) + Vector3.up * 0.5f, Vector3.zero, 0);
                         }
                     });
             }
@@ -148,6 +148,7 @@ namespace BrickSaboteur
             foreach (var item in tempList)
             {
                 BrickMgrM.LoaderManager.ReleaseObject(item.gameObject);
+                // BrickMgrM.PoolModule.GetPool<BallEntity>().Return(item);
             }
             ListPool<BallEntity>.Free(tempList);
         }

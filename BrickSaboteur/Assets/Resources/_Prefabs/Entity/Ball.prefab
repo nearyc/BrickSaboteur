@@ -20,16 +20,16 @@ GameObject:
   m_Component:
   - component: {fileID: 4965821516128650}
   - component: {fileID: 212810156506969886}
-  - component: {fileID: 58568958053659768}
   - component: {fileID: 114325959291837144}
   - component: {fileID: 50697079637804674}
+  - component: {fileID: 58735827606528238}
   m_Layer: 10
   m_Name: Ball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4965821516128650
 Transform:
   m_ObjectHideFlags: 1
@@ -63,7 +63,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!58 &58568958053659768
+--- !u!58 &58735827606528238
 CircleCollider2D:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -77,7 +77,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.15625
+  m_Radius: 0.25
 --- !u!114 &114325959291837144
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -89,7 +89,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c55509bb26e0f124a9e7e818af8e9a85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initSpeed: 7
+  initSpeed: 10
   rb: {fileID: 0}
 --- !u!212 &212810156506969886
 SpriteRenderer:
@@ -126,8 +126,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: e2388b2e10a1df946ae25a02264296f4, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 9bc0c4fe5131e0f4893766f6bf44b41d, type: 3}
+  m_Color: {r: 0.9150943, g: 0.8568218, b: 0.7985493, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

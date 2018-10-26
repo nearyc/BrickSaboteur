@@ -20,7 +20,7 @@ namespace BrickSaboteur
     /// <typeparam name="IEntityTag"></typeparam>
     public class BallEntity : ElementBase<IEntityTag>
     {
-        [Range(5, 10)] public float initSpeed = 5;
+        [Range(5, 10)] public float initSpeed = 10;
         CircleCollider2D _collider;
         public Rigidbody2D rb;
         protected override System.Collections.IEnumerator OnStart()

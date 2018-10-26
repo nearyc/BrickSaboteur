@@ -14,12 +14,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using NearyFrame;
 using NearyFrame.Base;
 using UniRx;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using DG.Tweening;
 #if USE_ADDRESSABLE
 using UnityEngine.ResourceManagement;
 #endif
@@ -51,7 +51,8 @@ namespace BrickSaboteur
         [Sirenix.OdinInspector.ShowInInspector] private string _prefabPrefix => AddressablePathEx.PREFAB_PREFIX;
         [Sirenix.OdinInspector.ShowInInspector] private string _prefabSuffix => AddressablePathEx.PREFAB_SUFFIX;
         [SerializeField] private int sceneIndex = 0;
-        [SerializeField] private int levelIndex = 0;
+        public int currentLevelIndex = 0;
+        public EDifficulty currentDifficulty;
         protected override void OnDestroy()
         {
             Mgr.Instance.UnRegisterModule(this);
@@ -72,13 +73,14 @@ namespace BrickSaboteur
         //游戏开始,1和2都对应游戏scene,通过切换销毁物体
         public void GameStart(int level, EDifficulty difficulty)
         {
-            levelIndex = level;
+            currentLevelIndex = level;
 
             if (sceneIndex != 1)
                 LoadSceneByNum(1).Last().Subscribe(__ =>
                 {
                     MessageBroker.Default.Publish(new GameTag_GameStart(level, difficulty));
                     sceneIndex = 1;
+                    this.currentDifficulty = difficulty;
                     // levelIndex++;
                 });
             else
@@ -87,6 +89,7 @@ namespace BrickSaboteur
                 {
                     MessageBroker.Default.Publish(new GameTag_GameStart(level, difficulty));
                     sceneIndex = 2;
+                    this.currentDifficulty = difficulty;
                     // levelIndex++;
                 });
             }
@@ -98,7 +101,7 @@ namespace BrickSaboteur
             //TODO
             MessageBroker.Default.Publish(new GameTag_GameEnd(isWin));
             //test
-            GameStart(++levelIndex, EDifficulty.Eazy);
+            GameStart(++currentLevelIndex, currentDifficulty);
         }
         //回到主菜单，3对应主菜单scene
         public void BackToMainMenu()
@@ -108,12 +111,12 @@ namespace BrickSaboteur
                 MessageBroker.Default.Publish(new GameTag_BackToMenu());
             });
         }
-         private void SceneTransition()
+        private void SceneTransition()
         {
             this.InstantiatePrefabByPath<GameObject>(AssetPath.Black)
-                .Do(x => x.transform.parent = BrickMgrM.UIModule.popUpHudCanvas.transform)
-                .Select(x=>x.GetComponent<UnityEngine.UI.Image>())
-                .Do(x=>x.DOFade(0,1f))
+                .Do(x => x.transform.parent = BrickMgrM.UIModule.constHudCanvas.transform)
+                .Select(x => x.GetComponent<UnityEngine.UI.Image>())
+                .Do(x => x.DOFade(0, 1f))
                 .Delay(System.TimeSpan.FromMilliseconds(1000))
                 .Subscribe(x =>
                 {
@@ -122,7 +125,7 @@ namespace BrickSaboteur
         }
         #region Addressable
         // ---------------------------------
-          // ---------------------------------
+        // ---------------------------------
         public IObservable<AsyncOperation> LoadScene(string key, LoadSceneMode loadMode = LoadSceneMode.Single)
         {
             // var op = Addressables.LoadScene($"Assets/_Scenes/{key}.unity", loadMode);
@@ -146,7 +149,7 @@ namespace BrickSaboteur
 #endif
 
         }
-       
+
         public Scene CurrentScene => SceneManager.GetActiveScene();
 #if USE_ADDRESSABLE
         public System.IObservable<IList<T>> InstantiateAll<T>(object key, Transform parentTran,
@@ -154,7 +157,6 @@ namespace BrickSaboteur
             Action<IAsyncOperation<IList<T>>> onCompleted = null)
         where T : UnityEngine.Object
         {
-
             return ObservableAddressables.InstantiateAll<T>(key, parentTran, onSingleCompleted, onCompleted);
         }
 
@@ -220,7 +222,7 @@ namespace BrickSaboteur
             return op;
         }
 #endif
-      
+
         #endregion
     }
 }

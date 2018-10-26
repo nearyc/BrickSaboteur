@@ -36,13 +36,12 @@ namespace BrickSaboteur
         }
         protected override IEnumerator AfterStart()
         {
-            yield return null;
             this.RegisterSelf(this);
 
             _textMeshProText = _textMeshProText.GetComponentFromDescendants(this, nameof(_textMeshProText));
             _skillButton = _skillButton.GetComponentFromChildren(this, nameof(_skillButton));
             yield return BrickMgrM.WaitModule<IPropertyTag>();
-            yield return new WaitForSeconds(0.1f);
+            yield return null;
             _skillHolder = BrickMgrM.PropertyModule.GetElement<SkillHolder>();
             //按下按键尝试释放
             _skillButton.OnClickAsObservable().Subscribe(__ =>

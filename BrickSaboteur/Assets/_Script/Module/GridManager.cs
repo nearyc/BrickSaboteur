@@ -23,6 +23,7 @@ namespace BrickSaboteur
 {
     public interface IGridTag : IModuleTag<IGridTag>
     {
+        Tilemap LevelTile { get; }
         void ReleaseTileWorldPos(Vector2 point);
     }
     /// <summary>
@@ -32,7 +33,8 @@ namespace BrickSaboteur
     /// <typeparam name="IEntityTag">Tag</typeparam>
     public class GridManager : ManagerBase<GridManager, IGridTag>, IGridTag
     {
-        [SerializeField] public Tilemap levelTile;
+        [Sirenix.OdinInspector.ShowInInspector] public Tilemap LevelTile { get; private set; }
+
         [SerializeField] public GameObject bgTile;
         [SerializeField] private TileBase _wall;
         [SerializeField] public List<TileBase> brickTileList;
@@ -66,8 +68,8 @@ namespace BrickSaboteur
             });
             yield return bgStream.ToYieldInstruction().AddTo(this);
             //levelTile
-            if (levelTile != null)
-                BrickMgrM.LoaderManager.ReleaseObject(levelTile.gameObject);
+            if (LevelTile != null)
+                BrickMgrM.LoaderManager.ReleaseObject(LevelTile.gameObject);
             var path = "";
             switch (difficulty)
             {
@@ -82,25 +84,29 @@ namespace BrickSaboteur
             var levelStram = BrickMgrM.LoaderManager.InstantiatePrefabByPath<GameObject>(path).Last().Do(x =>
             {
                 x.transform.parent = bgTile.transform;
-                levelTile = x.GetComponent<Tilemap>();
-
+                LevelTile = x.GetComponent<Tilemap>();
+                // var ballPool = (BrickMgrM.PoolModule as PoolManager).GetComponentInChildren<BallEntityPool>();
+                // if (ballPool != null)
+                // {
+                //     ballPool.levelTile = LevelTile;
+                // }
             });
             yield return levelStram.ToYieldInstruction().AddTo(this);
 
-            BoundsInt bounds = levelTile.cellBounds;
-            TileBase[] allTiles = levelTile.GetTilesBlock(bounds);
+            BoundsInt bounds = LevelTile.cellBounds;
+            TileBase[] allTiles = LevelTile.GetTilesBlock(bounds);
             brickTileList = allTiles.Where(x => x != null && x.name != _wall.name).ToList();
         }
         private Transform _bonusParent;
         public void ReleaseTileWorldPos(Vector2 worldPos)
         {
             if (_bonusParent == null) _bonusParent = GameObject.Find("BonusParent").transform;
-            var gridPos = levelTile.WorldToCell(worldPos);
-            var tile = levelTile.GetTile(gridPos);
+            var gridPos = LevelTile.WorldToCell(worldPos);
+            var tile = LevelTile.GetTile(gridPos);
             if (tile != null && tile.name != _wall.name)
             {
                 brickTileList.Remove(tile);
-                levelTile.SetTile(gridPos, null);
+                LevelTile.SetTile(gridPos, null);
                 int bonusNum = Random.Range(1, 50);
                 if (bonusNum < 4)
                     BrickMgrM.LoaderManager.InstantiatePrefabByPath<GameObject>(AssetPath.Bonus + bonusNum)

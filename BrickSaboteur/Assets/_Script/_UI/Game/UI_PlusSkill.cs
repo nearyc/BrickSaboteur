@@ -25,33 +25,30 @@ namespace BrickSaboteur
     /// <typeparam name="IUITag"></typeparam>
     public class UI_PlusSkill : UIELementBase<UI_PlusSkill>
     {
-        [SerializeField] TMPro.TextMeshProUGUI _textMeshProText;
-        [SerializeField] Button skillButton;
-        [SerializeField] SkillHolder skillHolder;
+        [SerializeField] TMPro.TextMeshProUGUI _plusTextMeshProText;
+        [SerializeField] Button _plusSkillButton;
         protected override void OnDestroy()
         {
             this.UnRegisterSelf(this);
         }
         protected override IEnumerator AfterStart()
         {
-            yield return null;
             this.RegisterSelf(this);
 
-            _textMeshProText = _textMeshProText.GetComponentFromDescendants(this, nameof(_textMeshProText));
-            skillButton = skillButton.GetComponentFromChildren(this, nameof(skillButton));
+            _plusTextMeshProText = _plusTextMeshProText.GetComponentFromDescendants(this, nameof(_plusTextMeshProText));
+            _plusSkillButton = _plusSkillButton.GetComponentFromChildren(this, nameof(_plusSkillButton));
             yield return BrickMgrM.WaitModule<IPropertyTag>();
-            yield return new WaitForSeconds(0.1f);
-            skillHolder = BrickMgrM.PropertyModule.GetElement<SkillHolder>();
+            yield return null;
             // ---------------------- 
             //按下按键尝试释放
-            skillButton.OnClickAsObservable().Subscribe(__ =>
+            _plusSkillButton.OnClickAsObservable().Subscribe(__ =>
             {
                 MessageBroker.Default.Publish(new SkillTag_TryPlusSkill());
                 MessageBroker.Default.Publish(new PropTag_ModifyPlusCount { value = -1 });
             }).AddTo(this);
             // ---------------------- 
             //更新数字
-            BrickMgrM.PropertyModule.plusCount.current.SubscribeWithState(_textMeshProText, (x, t) => t.text = x.ToString()).AddTo(this);
+            BrickMgrM.PropertyModule.plusCount.current.SubscribeWithState(_plusTextMeshProText, (x, t) => t.text = x.ToString()).AddTo(this);
         }
     }
 }

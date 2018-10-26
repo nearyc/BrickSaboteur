@@ -12,6 +12,7 @@
 #endregion
 using System.Collections;
 using DG.Tweening;
+using NearyFrame.Base;
 using UniRx;
 using Unity.Linq;
 using UnityEngine;
@@ -44,19 +45,36 @@ namespace BrickSaboteur
             _blockBg = _blockBg.GetComponentFromChildren(this.transform.parent, nameof(_blockBg));
             yield return null;
             Hide();
+
             _nextLevelButton.OnClickAsObservable().Subscribe(__ => Hide()).AddTo(this);
+
+            _backToMenuButton.OnClickAsObservable().Subscribe(__ =>
+            {
+                BrickMgrM.LoaderManager.BackToMainMenu();
+                this.Hide();
+            }).AddTo(this);
+
+            _restartButton.OnClickAsObservable().Subscribe(__ =>
+            {
+                BrickMgrM.LoaderManager.GameStart(BrickMgrM.LoaderManager.currentLevelIndex, BrickMgrM.LoaderManager.currentDifficulty);
+            }).AddTo(this);
         }
         public override void Show()
         {
             base.Show();
             this.transform.DOLocalMoveY(-100, 0.5f).SetEase(Ease.InOutBack);
             _blockBg.gameObject.SetActive(true);
+            _blockBg.GetComponent<Image>().DOFade(0.5f, 0.5f);
         }
         public override void Hide()
         {
             base.Hide();
             this.transform.DOLocalMoveY(1000, 0.5f).SetEase(Ease.InOutBack);
-            _blockBg.gameObject.SetActive(false);
+            _blockBg.GetComponent<Image>().DOFade(0, 0.5f);
+            Observable.Timer(System.TimeSpan.FromMilliseconds(500)).Subscribe(__ =>
+            {
+                _blockBg.gameObject.SetActive(false);
+            });
         }
     }
 }
