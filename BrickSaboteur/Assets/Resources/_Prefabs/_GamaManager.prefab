@@ -715,8 +715,8 @@ Camera:
   m_GameObject: {fileID: 1667344447689194}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 3
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.21176471, g: 0.32156864, b: 0.42352942, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -755,8 +755,8 @@ Camera:
   m_GameObject: {fileID: 1977451305077730}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 3
-  m_BackGroundColor: {r: 0.13683698, g: 0.1629602, b: 0.23584908, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.21176471, g: 0.32156864, b: 0.42352942, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -839,7 +839,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b2aa5ad4d3bfde4ea230e4054fa2f4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelTile: {fileID: 0}
   bgTile: {fileID: 0}
   _wall: {fileID: 11400000, guid: 670215e03782a7944804f9df51d02834, type: 2}
   brickTileList: []
@@ -1329,8 +1328,8 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 90, y: 90}
-  m_Spacing: {x: 30, y: 40}
+  m_CellSize: {x: 66, y: 66}
+  m_Spacing: {x: 24, y: 30}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!114 &114343048760848088
@@ -1990,8 +1989,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 18.125, y: -44}
-  m_SizeDelta: {x: -201.65, y: -508.6}
+  m_AnchoredPosition: {x: 18.125, y: -34.400024}
+  m_SizeDelta: {x: -201.6, y: -470.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224079867905577428
 RectTransform:
@@ -2154,7 +2153,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.0000038128492, y: -0.000011942709}
+  m_AnchoredPosition: {x: -0.0000038128492, y: -0.000011023366}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224577101565937426
@@ -2192,7 +2191,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 75, y: 0}
+  m_AnchoredPosition: {x: 60, y: 0}
   m_SizeDelta: {x: 30, y: -17}
   m_Pivot: {x: 1, y: 1}
 --- !u!224 &224613051589368062

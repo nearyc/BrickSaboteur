@@ -43,9 +43,14 @@ namespace BrickSaboteur
                     x.rb = x.GetComponent<Rigidbody2D>();
                 x.rb.velocity = Vector3.zero;
             };
-            pool.MaxCount = 500;
-            pool.PreloadAsync(100, 10).Subscribe();
+            // pool.MaxCount = 500;
+           MessageBroker.Default.Receive<GameTag_GameStart>().Delay(System.TimeSpan.FromMilliseconds(500)).Subscribe(__=>{
+               if(_preload!=null) _preload.Dispose();
+               _preload= pool.PreloadAsync(498, 1).Subscribe().AddTo(this);
+           });
             // pool.
         }
+        [Sirenix.OdinInspector.ShowInInspector]
+    System.IDisposable _preload;
     }
 }

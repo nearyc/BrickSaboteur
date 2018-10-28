@@ -60,7 +60,7 @@ namespace BrickSaboteur
                     BrickMgrM.LoaderManager.InstantiatePrefabByPath<GameObject>(AssetPath.HealthIcon).Last().Subscribe(x =>
                     {
                         //会变大，需重置
-                        x.transform.parent = this.transform;
+                        x.transform.SetParent(this.transform);
                         x.transform.localScale = Vector3.one;
                         x.transform.localPosition = Vector3.zero;
                     });

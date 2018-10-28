@@ -95,7 +95,7 @@ namespace Nearyc.Utility
             if (prefab != null)
             {
                 var t = GameObject.Instantiate(prefab).GetComponent<T>();
-                t.transform.parent = parent;
+                t.transform.SetParent(parent);
                 return Observable.Return(t);
             }
             else
@@ -194,12 +194,12 @@ namespace Nearyc.Utility
 
             if (q == null) q = new Queue<T>();
 
-            if ((q.Count + 1) == MaxCount)
-            {
-                // throw new InvalidOperationException("Reached Max PoolSize");
-                Debug.Log("Reached Max PoolSize");
-                return;
-            }
+            // if ((q.Count + 1) == MaxCount)
+            // {
+            //     // throw new InvalidOperationException("Reached Max PoolSize");
+            //     Debug.Log("Reached Max PoolSize");
+            //     return;
+            // }
 
             OnBeforeReturn(instance);
             q.Enqueue(instance);

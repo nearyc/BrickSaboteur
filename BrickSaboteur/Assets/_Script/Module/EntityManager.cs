@@ -66,10 +66,15 @@ namespace BrickSaboteur
             MessageBroker.Default.Receive<PropTag_ModifySliderSize>().Subscribe(x => GenerateSlider()).AddTo(this);
             //回到菜单
             MessageBroker.Default.Receive<GameTag_BackToMenu>()
-                .Subscribe(__ => ClearBalls(false)).AddTo(this);;
+                .Subscribe(__ => {
+                    Observable.Timer(System.TimeSpan.FromMilliseconds(150)).Subscribe(___=>ClearBalls(false));
+                }).AddTo(this);;
             //开始
             MessageBroker.Default.Receive<GameTag_GameStart>()
-                .Subscribe(__ => MessageBroker.Default.Publish(new GameTag_Reload())).AddTo(this);
+                .Subscribe(__ => {
+                    MessageBroker.Default.Publish(new GameTag_Reload());
+                    ClearBalls(false);
+                }).AddTo(this);
             //游戏结束
             MessageBroker.Default.Receive<GameTag_GameEnd>()
                 .Subscribe(x => ClearBalls(x.isWinorNot)).AddTo(this);;

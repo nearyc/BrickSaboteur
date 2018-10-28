@@ -35,15 +35,15 @@ namespace BrickSaboteur
         {
             this.UnRegisterSelf(this);
         }
-        public override void Show()
+        public override void Show(float time=0.5f)
         {
             base.Show();
-            this.transform.DOLocalMoveX(0, 0.5f).SetEase(Ease.InExpo);
+            this.transform.DOLocalMoveX(0, time).SetEase(Ease.InExpo);
         }
-        public override void Hide()
+        public override void Hide(float time=0.5f)
         {
             base.Hide();
-            this.transform.DOLocalMoveX(1000, 0.5f).SetEase(Ease.InExpo);
+            this.transform.DOLocalMoveX(1000, time).SetEase(Ease.InExpo);
         }
         protected override IEnumerator AfterStart()
         {
@@ -70,13 +70,13 @@ namespace BrickSaboteur
             pool.parent = _content;
             pool.onBeforeRent += x =>
             {
-                x.transform.parent = _content;
+                x.transform.SetParent(_content);
                 x.transform.localScale = Vector3.one;
                 x.transform.localPosition = Vector3.zero;
             };
             pool.onBeforeReturn += x =>
             {
-                x.transform.parent = _content;
+                // x.transform.SetParent(_content);
             };
             pool.PreloadAsync(100, 10).Subscribe();
             PreloadLevelSlot(100, 1, EDifficulty.Eazy);

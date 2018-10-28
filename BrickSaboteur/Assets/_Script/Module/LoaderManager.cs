@@ -114,7 +114,7 @@ namespace BrickSaboteur
         private void SceneTransition()
         {
             this.InstantiatePrefabByPath<GameObject>(AssetPath.Black)
-                .Do(x => x.transform.parent = BrickMgrM.UIModule.constHudCanvas.transform)
+                .Do(x => x.transform.SetParent(BrickMgrM.UIModule.constHudCanvas.transform))
                 .Select(x => x.GetComponent<UnityEngine.UI.Image>())
                 .Do(x => x.DOFade(0, 1f))
                 .Delay(System.TimeSpan.FromMilliseconds(1000))

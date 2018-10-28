@@ -19,23 +19,6 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace BrickSaboteur
 {
-    [RequireComponent(typeof(CanvasGroup))]
-    public abstract class UIELementBase<T> : ElementBaseSingle<T, IUITag> where T : UIELementBase<T>
-    {
-        protected CanvasGroup _group;
-        public virtual void Show()
-        {
-            if (_group == null) _group = this.GetComponent<CanvasGroup>();
-            this._group.interactable = true;
-            this._group.DOFade(1, 0.5f);
-        }
-        public virtual void Hide()
-        {
-            if (_group == null) _group = this.GetComponent<CanvasGroup>();
-            this._group.interactable = false;
-            this._group.DOFade(0, 0.5f);
-        }
-    }
     public class UI_MainMenu : UIELementBase<UI_MainMenu>
     {
         [SerializeField] private Button _playButton; //开始游戏
@@ -83,15 +66,15 @@ namespace BrickSaboteur
             yield return null;
 
         }
-        public override void Show()
+        public override void Show(float time=0.5f)
         {
             base.Show();
-            this.transform.DOLocalMoveX(0, 0.5f).SetEase(Ease.InExpo);
+            this.transform.DOLocalMoveX(0, time).SetEase(Ease.InExpo);
         }
-        public override void Hide()
+        public override void Hide(float time=0.5f)
         {
             base.Hide();
-            this.transform.DOLocalMoveX(-1000, 0.5f).SetEase(Ease.InExpo);
+            this.transform.DOLocalMoveX(-1000, time).SetEase(Ease.InExpo);
         }
         private void OnPlay()
         {

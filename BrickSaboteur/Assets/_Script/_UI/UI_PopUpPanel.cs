@@ -46,33 +46,40 @@ namespace BrickSaboteur
             yield return null;
             Hide();
 
-            _nextLevelButton.OnClickAsObservable().Subscribe(__ => Hide()).AddTo(this);
+            _nextLevelButton.OnClickAsObservable().Subscribe(__ => {
+                Time.timeScale=1f;
+                this.Hide();
+            }).AddTo(this);
 
             _backToMenuButton.OnClickAsObservable().Subscribe(__ =>
             {
-                BrickMgrM.LoaderManager.BackToMainMenu();
+                 Time.timeScale=1f;
                 this.Hide();
+                BrickMgrM.LoaderManager.BackToMainMenu();
             }).AddTo(this);
 
             _restartButton.OnClickAsObservable().Subscribe(__ =>
             {
+                 Time.timeScale=1f;
+                 this.Hide();
                 BrickMgrM.LoaderManager.GameStart(BrickMgrM.LoaderManager.currentLevelIndex, BrickMgrM.LoaderManager.currentDifficulty);
             }).AddTo(this);
         }
-        public override void Show()
+        public override void Show(float time=0.5f)
         {
             base.Show();
-            this.transform.DOLocalMoveY(-100, 0.5f).SetEase(Ease.InOutBack);
+            this.transform.DOLocalMoveY(-100, time).SetEase(Ease.InOutBack).SetUpdate(true);
             _blockBg.gameObject.SetActive(true);
-            _blockBg.GetComponent<Image>().DOFade(0.5f, 0.5f);
+            _blockBg.GetComponent<Image>().DOFade(0.5f, time).SetUpdate(true);
         }
-        public override void Hide()
+        public override void Hide(float time=0.5f)
         {
             base.Hide();
-            this.transform.DOLocalMoveY(1000, 0.5f).SetEase(Ease.InOutBack);
-            _blockBg.GetComponent<Image>().DOFade(0, 0.5f);
+            this.transform.DOLocalMoveY(1000, time).SetEase(Ease.InOutBack);
+            _blockBg.GetComponent<Image>().DOFade(0, time);
             Observable.Timer(System.TimeSpan.FromMilliseconds(500)).Subscribe(__ =>
             {
+                if(_blockBg!=null)
                 _blockBg.gameObject.SetActive(false);
             });
         }

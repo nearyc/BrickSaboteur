@@ -15,6 +15,7 @@ using NearyFrame.Base;
 using UniRx;
 using Unity.Linq;
 using UnityEngine.UI;
+using UnityEngine;
 namespace BrickSaboteur
 {
     public class UI_Pause : UIELementBase<UI_MultiplySkill>
@@ -29,6 +30,7 @@ namespace BrickSaboteur
             _pauseButton.OnClickAsObservable().Subscribe(__ =>
             {
                 BrickMgrM.UIModule.GetElement<UI_PopUpPanel>().Show();
+                Time.timeScale=0f;
             }).AddTo(this);
         }
 

@@ -73,6 +73,7 @@ namespace BrickSaboteur
         private void OnChooseLevel()
         {
             // MessageBroker.Default.Publish(new GameTag_GameStart(level, difficulty));
+            BrickMgrM.UIModule.GetElement<UI_LevelPanel>().Hide(0.2f);
             BrickMgrM.LoaderManager.GameStart(level, difficulty);
         }
     }
